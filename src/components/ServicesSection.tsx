@@ -1,7 +1,8 @@
 import React from 'react';
 import { useLanguage } from '../context/LanguageContext';
 import { ServiceId } from '../types';
-import { Dumbbell, Activity, UserCheck, ArrowRight, AlertCircle, ShieldAlert } from 'lucide-react';
+import { motion } from 'framer-motion';
+import { Dumbbell, Activity, UserCheck, ArrowRight, ShieldAlert, Check } from 'lucide-react';
 
 interface ServicesSectionProps {
   onSelectService: (serviceId: ServiceId) => void;
@@ -17,6 +18,7 @@ export const ServicesSection: React.FC<ServicesSectionProps> = ({ onSelectServic
       badge: t.services.sAndC.badge,
       title: t.services.sAndC.title,
       description: t.services.sAndC.desc,
+      features: t.services.sAndC.features,
       cta: t.services.sAndC.cta,
       icon: Dumbbell,
       hasDisclaimer: false,
@@ -28,6 +30,7 @@ export const ServicesSection: React.FC<ServicesSectionProps> = ({ onSelectServic
       badge: t.services.reathle.badge,
       title: t.services.reathle.title,
       description: t.services.reathle.desc,
+      features: t.services.reathle.features,
       disclaimer: t.services.reathle.disclaimer,
       cta: t.services.reathle.cta,
       icon: Activity,
@@ -40,6 +43,7 @@ export const ServicesSection: React.FC<ServicesSectionProps> = ({ onSelectServic
       badge: t.services.privateCoach.badge,
       title: t.services.privateCoach.title,
       description: t.services.privateCoach.desc,
+      features: t.services.privateCoach.features,
       cta: t.services.privateCoach.cta,
       icon: UserCheck,
       hasDisclaimer: false,
@@ -48,12 +52,15 @@ export const ServicesSection: React.FC<ServicesSectionProps> = ({ onSelectServic
   ];
 
   return (
-    <section id="programs" className="py-20 sm:py-28 bg-brand-navy relative border-t border-brand-silver/10">
+    <section id="programs" className="py-20 sm:py-28 bg-brand-navy relative border-t border-brand-silver/10 overflow-hidden">
+      {/* Background ambient lighting */}
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[500px] bg-brand-steel/40 rounded-full blur-[140px] pointer-events-none" />
+
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto mb-14 sm:mb-20">
-          <div className="inline-flex items-center gap-2 px-3 py-1 bg-brand-steel border border-brand-silver/15 rounded-md text-xs font-black tracking-widest text-brand-red uppercase mb-3 sm:mb-4">
+          <div className="inline-flex items-center gap-2 px-3 py-1 bg-brand-steel border border-brand-silver/15 rounded-md text-xs font-black tracking-widest text-brand-red uppercase mb-4">
             <span className="w-1.5 h-1.5 rounded-full bg-brand-red" />
             <span>{t.services.sectionBadge}</span>
           </div>
@@ -69,34 +76,39 @@ export const ServicesSection: React.FC<ServicesSectionProps> = ({ onSelectServic
 
         {/* 3 Services Cards Grid */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8 items-stretch">
-          {services.map((srv) => {
+          {services.map((srv, idx) => {
             const Icon = srv.icon;
             return (
-              <div
+              <motion.div
                 key={srv.id}
-                className={`relative flex flex-col justify-between rounded-2xl p-6 sm:p-8 bg-brand-steel border transition-all duration-300 group hover:-translate-y-1 ${
+                initial={{ opacity: 0, y: 25 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: idx * 0.15 }}
+                whileHover={{ y: -6 }}
+                className={`relative flex flex-col justify-between rounded-3xl p-6 sm:p-8 bg-brand-steel/80 backdrop-blur-xl border transition-all duration-300 group shadow-2xl ${
                   srv.popular
-                    ? 'border-brand-red/50 shadow-xl shadow-brand-red/10'
-                    : 'border-brand-silver/15 hover:border-brand-silver/30'
+                    ? 'border-brand-red/60 shadow-brand-red/10'
+                    : 'border-brand-silver/15 hover:border-brand-red/40'
                 }`}
               >
                 {/* Top indicator bar */}
-                <div className="absolute top-0 left-8 right-8 h-[2px] bg-gradient-to-r from-transparent via-brand-red/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+                <div className="absolute top-0 left-8 right-8 h-[2px] bg-gradient-to-r from-transparent via-brand-red to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
 
                 <div>
                   {/* Top Bar with Number code and badge */}
-                  <div className="flex items-center justify-between mb-5">
+                  <div className="flex items-center justify-between mb-6">
                     <span className="text-2xl sm:text-3xl font-black text-brand-red font-mono tracking-tighter">
                       {srv.code}
                     </span>
-                    <span className="px-2.5 py-1 text-[10px] sm:text-[11px] font-bold tracking-wider uppercase rounded-md bg-brand-navy border border-brand-silver/15 text-brand-silver">
+                    <span className="px-3 py-1 text-[10px] sm:text-[11px] font-mono font-bold tracking-wider uppercase rounded-full bg-brand-navy border border-brand-silver/15 text-brand-silver">
                       {srv.badge}
                     </span>
                   </div>
 
                   {/* Service Icon */}
-                  <div className="w-12 h-12 rounded-xl bg-brand-navy border border-brand-silver/15 flex items-center justify-center text-brand-silver group-hover:text-brand-red group-hover:border-brand-red/40 transition-colors mb-5">
-                    <Icon className="w-6 h-6" />
+                  <div className="w-14 h-14 rounded-2xl bg-brand-navy border border-brand-silver/15 flex items-center justify-center text-brand-silver group-hover:text-brand-red group-hover:border-brand-red/40 transition-colors mb-6 shadow-inner">
+                    <Icon className="w-7 h-7" />
                   </div>
 
                   {/* Title */}
@@ -109,11 +121,25 @@ export const ServicesSection: React.FC<ServicesSectionProps> = ({ onSelectServic
                     {srv.description}
                   </p>
 
+                  {/* 4 Feature Bullets */}
+                  {srv.features && (
+                    <div className="space-y-2.5 mb-6 pt-4 border-t border-brand-silver/10">
+                      {srv.features.map((feat, fIdx) => (
+                        <div key={fIdx} className="flex items-start gap-2.5 text-xs text-brand-silver/90 font-medium">
+                          <div className="w-4 h-4 rounded-full bg-brand-navy border border-brand-silver/20 flex items-center justify-center text-brand-red flex-shrink-0 mt-0.5">
+                            <Check className="w-2.5 h-2.5" />
+                          </div>
+                          <span>{feat}</span>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+
                   {/* Disclaimer for Reathletisation */}
                   {srv.hasDisclaimer && srv.disclaimer && (
-                    <div className="mb-6 p-3.5 rounded-xl bg-brand-navy/95 border border-brand-red/40 flex items-start gap-2.5">
+                    <div className="mb-6 p-4 rounded-xl bg-brand-navy border border-brand-red/40 flex items-start gap-3">
                       <ShieldAlert className="w-4 h-4 text-brand-red flex-shrink-0 mt-0.5" />
-                      <p className="text-[11px] sm:text-xs text-brand-silver/90 leading-normal font-medium">
+                      <p className="text-[11px] text-brand-silver/90 leading-relaxed font-medium">
                         {srv.disclaimer}
                       </p>
                     </div>
@@ -124,13 +150,13 @@ export const ServicesSection: React.FC<ServicesSectionProps> = ({ onSelectServic
                 <div className="pt-6 border-t border-brand-silver/10">
                   <button
                     onClick={() => onSelectService(srv.id)}
-                    className="w-full flex items-center justify-center gap-2.5 py-3.5 px-4 bg-brand-navy hover:bg-brand-red text-brand-white font-extrabold text-xs sm:text-sm tracking-wider uppercase rounded-xl border border-brand-silver/20 hover:border-brand-red transition-all duration-200 group-hover:shadow-lg active:scale-[0.99]"
+                    className="w-full flex items-center justify-center gap-2.5 py-4 px-5 bg-brand-navy hover:bg-brand-red text-brand-white font-extrabold text-xs sm:text-sm tracking-wider uppercase rounded-xl border border-brand-silver/20 hover:border-brand-red transition-all duration-200 group-hover:shadow-lg active:scale-[0.99]"
                   >
                     <span>{srv.cta}</span>
                     <ArrowRight className={`w-4 h-4 transition-transform duration-200 group-hover:translate-x-1 ${isRtl ? 'rotate-180 group-hover:-translate-x-1' : ''}`} />
                   </button>
                 </div>
-              </div>
+              </motion.div>
             );
           })}
         </div>

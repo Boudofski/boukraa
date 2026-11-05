@@ -78,12 +78,18 @@ export const Header: React.FC<HeaderProps> = ({ onStartAssessment, onOpenAdmin }
           </a>
 
           {/* Desktop Navigation Links */}
-          <nav className="hidden lg:flex items-center gap-8">
+          <nav className="hidden lg:flex items-center gap-7">
             <button
               onClick={() => handleNavClick('#programs')}
               className="text-xs font-bold tracking-widest text-brand-silver hover:text-white transition-colors uppercase"
             >
               {t.nav.programs}
+            </button>
+            <button
+              onClick={() => handleNavClick('#methodology')}
+              className="text-xs font-bold tracking-widest text-brand-silver hover:text-white transition-colors uppercase"
+            >
+              {t.nav.methodology}
             </button>
             <button
               onClick={() => handleNavClick('#private-coaching')}
@@ -92,10 +98,10 @@ export const Header: React.FC<HeaderProps> = ({ onStartAssessment, onOpenAdmin }
               {t.nav.privateCoaching}
             </button>
             <button
-              onClick={() => handleNavClick('#courses')}
+              onClick={() => handleNavClick('#faq')}
               className="text-xs font-bold tracking-widest text-brand-silver hover:text-white transition-colors uppercase"
             >
-              {t.nav.courses}
+              {t.nav.faq}
             </button>
             <button
               onClick={() => handleNavClick('#about')}
@@ -108,12 +114,12 @@ export const Header: React.FC<HeaderProps> = ({ onStartAssessment, onOpenAdmin }
           {/* Right Header: Language Switcher & Action CTA */}
           <div className="hidden sm:flex items-center gap-3.5">
             {/* Language Selector */}
-            <div className="flex items-center bg-brand-steel p-1 rounded-lg border border-brand-silver/15">
+            <div className="flex items-center bg-brand-steel p-1 rounded-xl border border-brand-silver/15">
               {languages.map((l) => (
                 <button
                   key={l.code}
                   onClick={() => setLocale(l.code)}
-                  className={`px-2.5 py-1 text-xs font-black rounded-md transition-all ${
+                  className={`px-2.5 py-1 text-xs font-black rounded-lg transition-all ${
                     locale === l.code
                       ? 'bg-brand-red text-white shadow-sm'
                       : 'text-brand-gray hover:text-white hover:bg-white/5'
@@ -137,7 +143,7 @@ export const Header: React.FC<HeaderProps> = ({ onStartAssessment, onOpenAdmin }
             {/* Primary START CTA */}
             <button
               onClick={onStartAssessment}
-              className="relative inline-flex items-center justify-center gap-2 px-5 py-2.5 bg-brand-red hover:bg-red-600 text-white font-extrabold text-xs sm:text-sm tracking-wider uppercase rounded transition-all duration-200 transform hover:-translate-y-0.5 shadow-md shadow-brand-red/25 active:translate-y-0"
+              className="relative inline-flex items-center justify-center gap-2 px-5 py-2.5 bg-brand-red hover:bg-red-600 text-white font-extrabold text-xs sm:text-sm tracking-wider uppercase rounded-xl transition-all duration-200 transform hover:-translate-y-0.5 shadow-md shadow-brand-red/25 active:translate-y-0"
             >
               <span>{t.nav.startAssessment}</span>
               <ArrowRight className={`w-4 h-4 ${isRtl ? 'rotate-180' : ''}`} />
@@ -146,12 +152,12 @@ export const Header: React.FC<HeaderProps> = ({ onStartAssessment, onOpenAdmin }
 
           {/* Mobile Right Bar: Language Switcher + Hamburger */}
           <div className="flex sm:hidden items-center gap-2">
-            <div className="flex items-center bg-brand-steel p-0.5 rounded border border-brand-silver/15">
+            <div className="flex items-center bg-brand-steel p-0.5 rounded-lg border border-brand-silver/15">
               {languages.map((l) => (
                 <button
                   key={l.code}
                   onClick={() => setLocale(l.code)}
-                  className={`px-2 py-1 text-[11px] font-bold rounded ${
+                  className={`px-2 py-1 text-[11px] font-bold rounded-md ${
                     locale === l.code ? 'bg-brand-red text-white' : 'text-brand-gray'
                   }`}
                 >
@@ -173,29 +179,35 @@ export const Header: React.FC<HeaderProps> = ({ onStartAssessment, onOpenAdmin }
 
       {/* Mobile Drawer (Clean Fullscreen Overlay on Mobile) */}
       {mobileMenuOpen && (
-        <div className="fixed inset-x-0 top-[60px] bottom-0 z-50 bg-brand-navy/98 backdrop-blur-xl border-t border-brand-silver/15 flex flex-col justify-between p-6 overflow-y-auto sm:hidden animate-in fade-in slide-in-from-top-4 duration-200">
+        <div className="fixed inset-x-0 top-[60px] bottom-0 z-50 bg-brand-navy/98 backdrop-blur-xl border-t border-brand-silver/15 flex flex-col justify-between p-6 overflow-y-auto sm:hidden">
           <nav className="flex flex-col space-y-2 pt-2">
             <button
               onClick={() => handleNavClick('#programs')}
-              className="w-full text-left rtl:text-right py-4 px-4 text-base font-black tracking-wider text-brand-white uppercase rounded-xl bg-brand-steel/40 hover:bg-brand-steel border border-brand-silver/10 transition-colors"
+              className="w-full text-left rtl:text-right py-3.5 px-4 text-base font-black tracking-wider text-brand-white uppercase rounded-xl bg-brand-steel/40 hover:bg-brand-steel border border-brand-silver/10 transition-colors"
             >
               {t.nav.programs}
             </button>
             <button
+              onClick={() => handleNavClick('#methodology')}
+              className="w-full text-left rtl:text-right py-3.5 px-4 text-base font-black tracking-wider text-brand-white uppercase rounded-xl bg-brand-steel/40 hover:bg-brand-steel border border-brand-silver/10 transition-colors"
+            >
+              {t.nav.methodology}
+            </button>
+            <button
               onClick={() => handleNavClick('#private-coaching')}
-              className="w-full text-left rtl:text-right py-4 px-4 text-base font-black tracking-wider text-brand-white uppercase rounded-xl bg-brand-steel/40 hover:bg-brand-steel border border-brand-silver/10 transition-colors"
+              className="w-full text-left rtl:text-right py-3.5 px-4 text-base font-black tracking-wider text-brand-white uppercase rounded-xl bg-brand-steel/40 hover:bg-brand-steel border border-brand-silver/10 transition-colors"
             >
               {t.nav.privateCoaching}
             </button>
             <button
-              onClick={() => handleNavClick('#courses')}
-              className="w-full text-left rtl:text-right py-4 px-4 text-base font-black tracking-wider text-brand-white uppercase rounded-xl bg-brand-steel/40 hover:bg-brand-steel border border-brand-silver/10 transition-colors"
+              onClick={() => handleNavClick('#faq')}
+              className="w-full text-left rtl:text-right py-3.5 px-4 text-base font-black tracking-wider text-brand-white uppercase rounded-xl bg-brand-steel/40 hover:bg-brand-steel border border-brand-silver/10 transition-colors"
             >
-              {t.nav.courses}
+              {t.nav.faq}
             </button>
             <button
               onClick={() => handleNavClick('#about')}
-              className="w-full text-left rtl:text-right py-4 px-4 text-base font-black tracking-wider text-brand-white uppercase rounded-xl bg-brand-steel/40 hover:bg-brand-steel border border-brand-silver/10 transition-colors"
+              className="w-full text-left rtl:text-right py-3.5 px-4 text-base font-black tracking-wider text-brand-white uppercase rounded-xl bg-brand-steel/40 hover:bg-brand-steel border border-brand-silver/10 transition-colors"
             >
               {t.nav.about}
             </button>
@@ -219,7 +231,7 @@ export const Header: React.FC<HeaderProps> = ({ onStartAssessment, onOpenAdmin }
                 setMobileMenuOpen(false);
                 onOpenAdmin();
               }}
-              className="w-full flex items-center justify-center gap-2 py-3 text-xs font-bold text-brand-gray hover:text-white bg-brand-steel/60 rounded-lg border border-brand-silver/10"
+              className="w-full flex items-center justify-center gap-2 py-3 text-xs font-bold text-brand-gray hover:text-white bg-brand-steel/60 rounded-xl border border-brand-silver/10"
             >
               <ShieldCheck className="w-4 h-4 text-brand-red" />
               <span>{t.nav.adminPortal}</span>

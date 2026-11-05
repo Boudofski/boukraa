@@ -2,6 +2,7 @@ import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { useLanguage } from '../context/LanguageContext';
 import { ServiceId, Question } from '../types';
 import { servicesData } from '../data/servicesData';
+import { motion, AnimatePresence } from 'framer-motion';
 import {
   X,
   ArrowRight,
@@ -392,119 +393,127 @@ export const AssessmentModal: React.FC<AssessmentModalProps> = ({
             </div>
           ) : (
             /* One Question at a Time Screen */
-            <div className="space-y-6 my-auto">
-              
-              {/* Progress Count (03 / 10) */}
-              <div className="flex items-center justify-between text-xs font-mono font-bold text-brand-gray uppercase tracking-wider">
-                <span>
-                  {t.questionnaire.stepIndicator}{' '}
-                  <span className="text-brand-red">
-                    {String(currentIndex + 1).padStart(2, '0')}
-                  </span>{' '}
-                  / {String(activeQuestions.length).padStart(2, '0')}
-                </span>
-                <span className="text-brand-silver/60 font-semibold">
-                  {progressPercent}%
-                </span>
-              </div>
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={currentQuestion?.id || currentIndex}
+                initial={{ opacity: 0, x: isRtl ? -15 : 15 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: isRtl ? 15 : -15 }}
+                transition={{ duration: 0.22, ease: 'easeOut' }}
+                className="space-y-6 my-auto"
+              >
+                {/* Progress Count (03 / 10) */}
+                <div className="flex items-center justify-between text-xs font-mono font-bold text-brand-gray uppercase tracking-wider">
+                  <span>
+                    {t.questionnaire.stepIndicator}{' '}
+                    <span className="text-brand-red">
+                      {String(currentIndex + 1).padStart(2, '0')}
+                    </span>{' '}
+                    / {String(activeQuestions.length).padStart(2, '0')}
+                  </span>
+                  <span className="text-brand-silver/60 font-semibold">
+                    {progressPercent}%
+                  </span>
+                </div>
 
-              {/* Question Title & Subtitle */}
-              <div>
-                <h3 className="text-xl sm:text-2xl font-black text-brand-white leading-snug tracking-tight">
-                  {currentQuestion?.title[locale]}
-                </h3>
-                {currentQuestion?.subtitle && (
-                  <p className="text-xs sm:text-sm text-brand-silver/80 mt-2 font-medium">
-                    {currentQuestion.subtitle[locale]}
-                  </p>
-                )}
-              </div>
+                {/* Question Title & Subtitle */}
+                <div>
+                  <h3 className="text-xl sm:text-2xl font-black text-brand-white leading-snug tracking-tight">
+                    {currentQuestion?.title[locale]}
+                  </h3>
+                  {currentQuestion?.subtitle && (
+                    <p className="text-xs sm:text-sm text-brand-silver/80 mt-2 font-medium">
+                      {currentQuestion.subtitle[locale]}
+                    </p>
+                  )}
+                </div>
 
-              {/* Question Input Renderers */}
-              <div className="py-1" onKeyDown={handleKeyDown}>
-                {/* Text / Tel / Number Input */}
-                {(currentQuestion?.type === 'text' ||
-                  currentQuestion?.type === 'tel' ||
-                  currentQuestion?.type === 'number') && (
-                  <div>
-                    <input
-                      ref={inputRef as any}
-                      type={currentQuestion.type === 'number' ? 'number' : 'text'}
-                      value={currentAnswer || ''}
-                      onChange={(e) => handleAnswerChange(e.target.value)}
-                      placeholder={currentQuestion.placeholder?.[locale] || ''}
-                      className="w-full px-4 py-3.5 sm:py-4 bg-brand-navy border border-brand-silver/20 focus:border-brand-red rounded-xl text-brand-white text-base font-semibold placeholder:text-brand-gray/50 focus:outline-none focus:ring-1 focus:ring-brand-red transition-all"
-                    />
-                  </div>
-                )}
+                {/* Question Input Renderers */}
+                <div className="py-1" onKeyDown={handleKeyDown}>
+                  {/* Text / Tel / Number Input */}
+                  {(currentQuestion?.type === 'text' ||
+                    currentQuestion?.type === 'tel' ||
+                    currentQuestion?.type === 'number') && (
+                    <div>
+                      <input
+                        ref={inputRef as any}
+                        type={currentQuestion.type === 'number' ? 'number' : 'text'}
+                        value={currentAnswer || ''}
+                        onChange={(e) => handleAnswerChange(e.target.value)}
+                        placeholder={currentQuestion.placeholder?.[locale] || ''}
+                        className="w-full px-4 py-3.5 sm:py-4 bg-brand-navy border border-brand-silver/20 focus:border-brand-red rounded-xl text-brand-white text-base font-semibold placeholder:text-brand-gray/50 focus:outline-none focus:ring-1 focus:ring-brand-red transition-all"
+                      />
+                    </div>
+                  )}
 
-                {/* Textarea Input */}
-                {currentQuestion?.type === 'textarea' && (
-                  <div>
-                    <textarea
-                      ref={inputRef as any}
-                      rows={4}
-                      value={currentAnswer || ''}
-                      onChange={(e) => handleAnswerChange(e.target.value)}
-                      placeholder={currentQuestion.placeholder?.[locale] || ''}
-                      className="w-full px-4 py-3.5 sm:py-4 bg-brand-navy border border-brand-silver/20 focus:border-brand-red rounded-xl text-brand-white text-base font-medium placeholder:text-brand-gray/50 focus:outline-none focus:ring-1 focus:ring-brand-red transition-all"
-                    />
-                  </div>
-                )}
+                  {/* Textarea Input */}
+                  {currentQuestion?.type === 'textarea' && (
+                    <div>
+                      <textarea
+                        ref={inputRef as any}
+                        rows={4}
+                        value={currentAnswer || ''}
+                        onChange={(e) => handleAnswerChange(e.target.value)}
+                        placeholder={currentQuestion.placeholder?.[locale] || ''}
+                        className="w-full px-4 py-3.5 sm:py-4 bg-brand-navy border border-brand-silver/20 focus:border-brand-red rounded-xl text-brand-white text-base font-medium placeholder:text-brand-gray/50 focus:outline-none focus:ring-1 focus:ring-brand-red transition-all"
+                      />
+                    </div>
+                  )}
 
-                {/* Radio Options */}
-                {currentQuestion?.type === 'radio' && currentQuestion.options && (
-                  <div className="space-y-2.5 max-h-[46vh] overflow-y-auto pr-1">
-                    {currentQuestion.options.map((opt) => {
-                      const isSelected = currentAnswer === opt.value;
-                      return (
-                        <button
-                          key={opt.value}
-                          type="button"
-                          onClick={() => {
-                            handleAnswerChange(opt.value);
-                            // Smooth auto-advance
-                            setTimeout(() => {
-                              if (currentIndex < activeQuestions.length - 1) {
-                                setCurrentIndex((prev) => prev + 1);
-                              } else {
-                                setIsReviewStep(true);
-                              }
-                            }, 200);
-                          }}
-                          className={`w-full flex items-center justify-between p-3.5 sm:p-4 rounded-xl border text-left rtl:text-right transition-all duration-150 min-h-[52px] ${
-                            isSelected
-                              ? 'bg-brand-navy border-brand-red text-white shadow-md'
-                              : 'bg-brand-navy/60 border-brand-silver/15 text-brand-silver hover:border-brand-silver/30 hover:bg-brand-navy'
-                          }`}
-                        >
-                          <span className="text-sm sm:text-base font-bold pr-2 rtl:pr-0 rtl:pl-2">
-                            {opt.label[locale]}
-                          </span>
-                          <div
-                            className={`w-5 h-5 rounded-full border flex items-center justify-center flex-shrink-0 ${
+                  {/* Radio Options */}
+                  {currentQuestion?.type === 'radio' && currentQuestion.options && (
+                    <div className="space-y-2.5 max-h-[46vh] overflow-y-auto pr-1">
+                      {currentQuestion.options.map((opt) => {
+                        const isSelected = currentAnswer === opt.value;
+                        return (
+                          <button
+                            key={opt.value}
+                            type="button"
+                            onClick={() => {
+                              handleAnswerChange(opt.value);
+                              // Smooth auto-advance
+                              setTimeout(() => {
+                                if (currentIndex < activeQuestions.length - 1) {
+                                  setCurrentIndex((prev) => prev + 1);
+                                } else {
+                                  setIsReviewStep(true);
+                                }
+                              }, 200);
+                            }}
+                            className={`w-full flex items-center justify-between p-3.5 sm:p-4 rounded-xl border text-left rtl:text-right transition-all duration-150 min-h-[52px] ${
                               isSelected
-                                ? 'border-brand-red bg-brand-red text-white'
-                                : 'border-brand-silver/30'
+                                ? 'bg-brand-navy border-brand-red text-white shadow-md'
+                                : 'bg-brand-navy/60 border-brand-silver/15 text-brand-silver hover:border-brand-silver/30 hover:bg-brand-navy'
                             }`}
                           >
-                            {isSelected && <Check className="w-3.5 h-3.5 stroke-[3]" />}
-                          </div>
-                        </button>
-                      );
-                    })}
+                            <span className="text-sm sm:text-base font-bold pr-2 rtl:pr-0 rtl:pl-2">
+                              {opt.label[locale]}
+                            </span>
+                            <div
+                              className={`w-5 h-5 rounded-full border flex items-center justify-center flex-shrink-0 ${
+                                isSelected
+                                  ? 'border-brand-red bg-brand-red text-white'
+                                  : 'border-brand-silver/30'
+                              }`}
+                            >
+                              {isSelected && <Check className="w-3.5 h-3.5 stroke-[3]" />}
+                            </div>
+                          </button>
+                        );
+                      })}
+                    </div>
+                  )}
+                </div>
+
+                {/* Error Message */}
+                {errorMessage && (
+                  <div className="p-3 bg-red-950/70 border border-brand-red/50 rounded-lg text-xs text-red-200 flex items-center gap-2 animate-in fade-in">
+                    <AlertCircle className="w-4 h-4 text-brand-red flex-shrink-0" />
+                    <span>{errorMessage}</span>
                   </div>
                 )}
-              </div>
-
-              {/* Error Message */}
-              {errorMessage && (
-                <div className="p-3 bg-red-950/70 border border-brand-red/50 rounded-lg text-xs text-red-200 flex items-center gap-2 animate-in fade-in">
-                  <AlertCircle className="w-4 h-4 text-brand-red flex-shrink-0" />
-                  <span>{errorMessage}</span>
-                </div>
-              )}
-            </div>
+              </motion.div>
+            </AnimatePresence>
           )}
         </div>
 

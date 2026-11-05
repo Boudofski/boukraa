@@ -17,6 +17,7 @@
     background-color: #071827;
     color: #F5F7F8;
     font-family: 'Montserrat', 'Tajawal', sans-serif;
+    scroll-behavior: smooth;
   }
 
   html[dir="rtl"] {
@@ -24,10 +25,10 @@
   }
 }
 
-/* Custom scrollbar */
+/* Custom sleek scrollbar */
 ::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+  width: 7px;
+  height: 7px;
 }
 ::-webkit-scrollbar-track {
   background: #071827;
@@ -63,25 +64,49 @@
   transform: skewX(-20deg);
 }
 
-.diagonal-stripe-bg {
-  background-image: repeating-linear-gradient(
-    -45deg,
-    rgba(242, 29, 39, 0.03),
-    rgba(242, 29, 39, 0.03) 1px,
-    transparent 1px,
-    transparent 12px
-  );
+/* Precision Tech Mesh Grid */
+.bg-tech-grid {
+  background-image: 
+    linear-gradient(to right, rgba(217, 224, 229, 0.04) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(217, 224, 229, 0.04) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+
+.mask-radial {
+  mask-image: radial-gradient(ellipse 70% 60% at 50% 10%, #000 60%, transparent 100%);
+  -webkit-mask-image: radial-gradient(ellipse 70% 60% at 50% 10%, #000 60%, transparent 100%);
+}
+
+.mask-fade-edges {
+  mask-image: linear-gradient(to bottom, transparent 0%, black 15%, black 85%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 15%, black 85%, transparent 100%);
 }
 
 /* Glass & Card styles */
 .brand-card {
-  background: #102A3B;
+  background: rgba(16, 42, 59, 0.7);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
   border: 1px solid rgba(217, 224, 229, 0.08);
-  transition: all 0.25s ease-in-out;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 .brand-card:hover {
-  border-color: rgba(242, 29, 39, 0.35);
-  box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
+  border-color: rgba(242, 29, 39, 0.45);
+  box-shadow: 0 12px 35px -10px rgba(0, 0, 0, 0.7), 0 0 25px -5px rgba(242, 29, 39, 0.2);
+}
+
+.glow-red {
+  box-shadow: 0 0 40px -10px rgba(242, 29, 39, 0.35);
+}
+
+/* Shimmer highlight on buttons/cards */
+@keyframes shimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(200%); }
+}
+
+.animate-shimmer {
+  animation: shimmer 2.5s infinite;
 }
 
 /* RTL Helpers */
