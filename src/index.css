@@ -1,0 +1,90 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --brand-navy: #071827;
+    --brand-steel: #102A3B;
+    --brand-red: #F21D27;
+    --brand-silver: #D9E0E5;
+    --brand-white: #F5F7F8;
+    --brand-gray: #9BA9B3;
+    --brand-charcoal: #172027;
+  }
+
+  html {
+    background-color: #071827;
+    color: #F5F7F8;
+    font-family: 'Montserrat', 'Tajawal', sans-serif;
+  }
+
+  html[dir="rtl"] {
+    font-family: 'Tajawal', 'Montserrat', sans-serif;
+  }
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #071827;
+}
+::-webkit-scrollbar-thumb {
+  background: #102A3B;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #F21D27;
+}
+
+/* Diagonal logo-inspired accents */
+.diagonal-slash {
+  position: relative;
+}
+.diagonal-slash::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -12px;
+  width: 4px;
+  height: 100%;
+  background-color: #F21D27;
+  transform: skewX(-18deg);
+}
+
+.diagonal-accent-bar {
+  display: inline-block;
+  width: 40px;
+  height: 4px;
+  background-color: #F21D27;
+  transform: skewX(-20deg);
+}
+
+.diagonal-stripe-bg {
+  background-image: repeating-linear-gradient(
+    -45deg,
+    rgba(242, 29, 39, 0.03),
+    rgba(242, 29, 39, 0.03) 1px,
+    transparent 1px,
+    transparent 12px
+  );
+}
+
+/* Glass & Card styles */
+.brand-card {
+  background: #102A3B;
+  border: 1px solid rgba(217, 224, 229, 0.08);
+  transition: all 0.25s ease-in-out;
+}
+.brand-card:hover {
+  border-color: rgba(242, 29, 39, 0.35);
+  box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
+}
+
+/* RTL Helpers */
+[dir="rtl"] .rtl-flip {
+  transform: scaleX(-1);
+}
