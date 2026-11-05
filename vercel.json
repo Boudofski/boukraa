@@ -5,6 +5,14 @@
   "cleanUrls": true,
   "rewrites": [
     {
+      "source": "/api/admin/submissions/(.*)",
+      "destination": "/api/admin/submissions"
+    },
+    {
+      "source": "/api/admin/export",
+      "destination": "/api/admin/submissions"
+    },
+    {
       "source": "/api/(.*)",
       "destination": "/api/$1"
     },

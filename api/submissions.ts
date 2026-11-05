@@ -1,7 +1,5 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
-
-// In-memory fallback cache for serverless runtime
-const recentSubmissions: any[] = [];
+import { submissionsDb, StoredSubmission } from './_db.js';
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   // Enable CORS
@@ -28,7 +26,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     const id = `BK-${new Date().getFullYear()}-${randomSuffix}`;
     const createdAt = new Date().toISOString();
 
-    const submissionRecord = {
+    const submissionRecord: StoredSubmission = {
       id,
       service,
       fullName: String(fullName).trim(),
@@ -41,12 +39,9 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       createdAt,
     };
 
-    recentSubmissions.unshift(submissionRecord);
-    if (recentSubmissions.length > 100) recentSubmissions.pop();
+    submissionsDb.add(submissionRecord);
 
-    // Log to Vercel runtime logs for immediate visibility
     console.log(`[VERCEL NEW SUBMISSION] ID: ${id} | Name: ${fullName} | Service: ${service} | WhatsApp: ${whatsapp}`);
-    console.log('Answers:', JSON.stringify(answers));
 
     return res.status(201).json({
       success: true,
