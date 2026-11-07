@@ -11,6 +11,7 @@ export const translations = {
       faq: 'FAQ',
       about: 'À propos',
       startAssessment: 'COMMENCER MON BILAN',
+      startCta: 'COMMENCER',
       adminPortal: 'Espace Coach',
     },
     hero: {
@@ -355,6 +356,7 @@ export const translations = {
       faq: 'الأسئلة الشائعة',
       about: 'نبذة عني',
       startAssessment: 'ابدأ تقييمك البدني',
+      startCta: 'ابدأ الآن',
       adminPortal: 'لوحة التحكم',
     },
     hero: {
@@ -699,6 +701,7 @@ export const translations = {
       faq: 'FAQ',
       about: 'About',
       startAssessment: 'START MY ASSESSMENT',
+      startCta: 'START',
       adminPortal: 'Coach Portal',
     },
     hero: {

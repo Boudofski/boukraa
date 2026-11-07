@@ -12,7 +12,7 @@ export const Hero: React.FC<HeroProps> = ({ onStartAssessment }) => {
   const { locale, t, isRtl } = useLanguage();
 
   return (
-    <section className="relative pt-32 pb-20 sm:pt-44 sm:pb-32 overflow-hidden bg-brand-navy">
+    <section className="relative pt-28 pb-16 sm:pt-36 sm:pb-28 overflow-hidden bg-brand-navy">
       {/* Precision Tech Mesh Grid background with radial mask */}
       <div className="absolute inset-0 bg-tech-grid mask-radial opacity-60 pointer-events-none" />
 
