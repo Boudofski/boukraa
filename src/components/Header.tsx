@@ -78,7 +78,7 @@ export const Header: React.FC<HeaderProps> = ({ onStartAssessment, onOpenAdmin }
           </a>
 
           {/* Desktop Navigation Links */}
-          <nav className="hidden lg:flex items-center gap-7">
+          <nav className="hidden lg:flex items-center gap-6">
             <button
               onClick={() => handleNavClick('#programs')}
               className="text-xs font-bold tracking-widest text-brand-silver hover:text-white transition-colors uppercase"
@@ -90,6 +90,12 @@ export const Header: React.FC<HeaderProps> = ({ onStartAssessment, onOpenAdmin }
               className="text-xs font-bold tracking-widest text-brand-silver hover:text-white transition-colors uppercase"
             >
               {t.nav.methodology}
+            </button>
+            <button
+              onClick={() => handleNavClick('#field-action')}
+              className="text-xs font-bold tracking-widest text-brand-silver hover:text-white transition-colors uppercase"
+            >
+              {t.nav.fieldAction}
             </button>
             <button
               onClick={() => handleNavClick('#private-coaching')}
@@ -192,6 +198,12 @@ export const Header: React.FC<HeaderProps> = ({ onStartAssessment, onOpenAdmin }
               className="w-full text-left rtl:text-right py-3.5 px-4 text-base font-black tracking-wider text-brand-white uppercase rounded-xl bg-brand-steel/40 hover:bg-brand-steel border border-brand-silver/10 transition-colors"
             >
               {t.nav.methodology}
+            </button>
+            <button
+              onClick={() => handleNavClick('#field-action')}
+              className="w-full text-left rtl:text-right py-3.5 px-4 text-base font-black tracking-wider text-brand-white uppercase rounded-xl bg-brand-steel/40 hover:bg-brand-steel border border-brand-silver/10 transition-colors"
+            >
+              {t.nav.fieldAction}
             </button>
             <button
               onClick={() => handleNavClick('#private-coaching')}

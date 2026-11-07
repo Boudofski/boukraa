@@ -1,7 +1,7 @@
 import React from 'react';
 import { useLanguage } from '../context/LanguageContext';
 import { motion } from 'framer-motion';
-import { Award, Compass, Dumbbell, ShieldCheck, Check } from 'lucide-react';
+import { Award, Compass, Dumbbell, ShieldCheck, Check, Sparkles } from 'lucide-react';
 
 export const AboutSection: React.FC = () => {
   const { t } = useLanguage();
@@ -15,7 +15,7 @@ export const AboutSection: React.FC = () => {
         
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-center">
           
-          {/* Left Column: Logomark Card & Credentials */}
+          {/* Left Column: Authentic Portrait + Logomark Card & Credentials */}
           <motion.div
             initial={{ opacity: 0, x: -20 }}
             whileInView={{ opacity: 1, x: 0 }}
@@ -23,53 +23,57 @@ export const AboutSection: React.FC = () => {
             transition={{ duration: 0.6 }}
             className="lg:col-span-5 relative"
           >
-            <div className="p-7 sm:p-9 rounded-3xl bg-brand-steel/80 backdrop-blur-xl border border-brand-silver/15 relative overflow-hidden shadow-2xl">
+            <div className="rounded-3xl bg-brand-steel/80 backdrop-blur-xl border border-brand-silver/15 relative overflow-hidden shadow-2xl">
               
-              {/* Top Accent Bar */}
-              <div className="flex items-center gap-2 mb-6">
-                <span className="w-8 h-1 bg-brand-red skew-x-[-20deg]" />
-                <span className="w-4 h-1 bg-brand-red skew-x-[-20deg]" />
-                <span className="w-2 h-1 bg-brand-red skew-x-[-20deg]" />
-              </div>
-
-              {/* Official Stacked Logo */}
-              <div className="mb-8 flex justify-center">
+              {/* Photo on pitch in national training kit */}
+              <div className="relative aspect-[4/4] sm:aspect-[4/3] w-full overflow-hidden bg-brand-navy">
                 <img
-                  src="/logo-stacked.png"
-                  alt="BOUKRAA"
-                  className="h-20 sm:h-24 w-auto object-contain filter contrast-105"
+                  src="/assets/boukraa-coach-pitch.jpg"
+                  alt="Mohamed Amine Boukraa on football pitch in coaching tracksuit"
+                  className="w-full h-full object-cover object-top filter contrast-[1.03]"
+                  loading="lazy"
                 />
+                <div className="absolute inset-0 bg-gradient-to-t from-brand-steel via-transparent to-transparent" />
+                
+                {/* Official Stacked Logo overlay */}
+                <div className="absolute bottom-3 right-4 rtl:right-auto rtl:left-4 bg-brand-navy/85 backdrop-blur-md px-3.5 py-1.5 rounded-xl border border-brand-silver/20">
+                  <img
+                    src="/logo-header.png"
+                    alt="BOUKRAA"
+                    className="h-6 w-auto object-contain"
+                  />
+                </div>
               </div>
 
               {/* Bio summary credentials */}
-              <div className="space-y-3.5 pt-6 border-t border-brand-silver/10">
-                <div className="flex items-center gap-3.5 text-xs sm:text-sm font-bold text-brand-white p-2.5 rounded-xl bg-brand-navy/60 border border-brand-silver/10">
+              <div className="p-6 sm:p-7 space-y-3">
+                <div className="flex items-center gap-3.5 text-xs sm:text-sm font-bold text-brand-white p-3 rounded-xl bg-brand-navy/70 border border-brand-silver/10">
                   <div className="w-8 h-8 rounded-lg bg-brand-steel flex items-center justify-center text-brand-red flex-shrink-0">
                     <Award className="w-4 h-4" />
                   </div>
-                  <span>Enseignant d’Éducation Physique & Sportive</span>
+                  <span>Enseignant d’Éducation Physique & Sportive (EPS)</span>
                 </div>
 
-                <div className="flex items-center gap-3.5 text-xs sm:text-sm font-bold text-brand-white p-2.5 rounded-xl bg-brand-navy/60 border border-brand-silver/10">
+                <div className="flex items-center gap-3.5 text-xs sm:text-sm font-bold text-brand-white p-3 rounded-xl bg-brand-navy/70 border border-brand-silver/10">
                   <div className="w-8 h-8 rounded-lg bg-brand-steel flex items-center justify-center text-brand-red flex-shrink-0">
                     <Dumbbell className="w-4 h-4" />
                   </div>
                   <span>Strength & Conditioning Coach (Préparateur Physique)</span>
                 </div>
 
-                <div className="flex items-center gap-3.5 text-xs sm:text-sm font-bold text-brand-white p-2.5 rounded-xl bg-brand-navy/60 border border-brand-silver/10">
+                <div className="flex items-center gap-3.5 text-xs sm:text-sm font-bold text-brand-white p-3 rounded-xl bg-brand-navy/70 border border-brand-silver/10">
                   <div className="w-8 h-8 rounded-lg bg-brand-steel flex items-center justify-center text-brand-red flex-shrink-0">
                     <Compass className="w-4 h-4" />
                   </div>
                   <span>Coach de Football & Développement Moteur</span>
                 </div>
-              </div>
 
-              {/* Philosophy Tag at bottom */}
-              <div className="mt-8 pt-5 border-t border-brand-silver/10 text-center">
-                <span className="text-[11px] sm:text-xs font-black tracking-widest text-brand-red uppercase font-mono">
-                  {t.about.signatureTag}
-                </span>
+                {/* Philosophy Tag at bottom */}
+                <div className="pt-4 border-t border-brand-silver/10 text-center">
+                  <span className="text-[11px] sm:text-xs font-black tracking-widest text-brand-red uppercase font-mono">
+                    {t.about.signatureTag}
+                  </span>
+                </div>
               </div>
 
             </div>

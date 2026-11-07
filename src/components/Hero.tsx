@@ -2,7 +2,7 @@ import React from 'react';
 import { useLanguage } from '../context/LanguageContext';
 import { ServiceId } from '../types';
 import { motion } from 'framer-motion';
-import { ArrowRight, CheckCircle2, Dumbbell, Activity, UserCheck, Flame } from 'lucide-react';
+import { ArrowRight, CheckCircle2, Dumbbell, Activity, UserCheck, Award, Shield } from 'lucide-react';
 
 interface HeroProps {
   onStartAssessment: (serviceId?: ServiceId) => void;
@@ -17,7 +17,7 @@ export const Hero: React.FC<HeroProps> = ({ onStartAssessment }) => {
       <div className="absolute inset-0 bg-tech-grid mask-radial opacity-50 pointer-events-none" />
 
       {/* Ambient background light sources */}
-      <div className="absolute top-10 right-0 -mr-32 w-[500px] h-[500px] bg-brand-steel/60 rounded-full blur-[140px] pointer-events-none" />
+      <div className="absolute top-10 right-0 -mr-32 w-[520px] h-[520px] bg-brand-steel/60 rounded-full blur-[140px] pointer-events-none" />
       <div className="absolute bottom-10 left-0 -ml-20 w-[450px] h-[450px] bg-brand-red/10 rounded-full blur-[140px] pointer-events-none" />
       
       {/* Diagonal red logo slashes background pattern */}
@@ -38,7 +38,7 @@ export const Hero: React.FC<HeroProps> = ({ onStartAssessment }) => {
               initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5 }}
-              className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-brand-steel border border-brand-red/30 text-[11px] sm:text-xs font-black uppercase tracking-wider text-brand-silver mb-5 w-fit shadow-lg shadow-brand-red/5"
+              className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-brand-steel border border-brand-red/30 text-[11px] sm:text-xs font-black uppercase tracking-wider text-brand-silver mb-5 w-fit shadow-lg shadow-brand-red/5"
             >
               <span className="w-2 h-2 rounded-full bg-brand-red animate-pulse" />
               <span className="text-white font-mono">{t.hero.cohortBadge}</span>
@@ -119,21 +119,21 @@ export const Hero: React.FC<HeroProps> = ({ onStartAssessment }) => {
               <div className="flex flex-wrap items-center gap-2">
                 <button
                   onClick={() => onStartAssessment('strength_conditioning')}
-                  className="px-3 py-1.5 rounded-lg bg-brand-steel/80 hover:bg-brand-steel border border-brand-silver/15 hover:border-brand-red/40 text-[11px] font-bold text-brand-silver hover:text-white transition-all flex items-center gap-1.5"
+                  className="px-3.5 py-2 rounded-xl bg-brand-steel/80 hover:bg-brand-steel border border-brand-silver/15 hover:border-brand-red/50 text-[11px] font-bold text-brand-silver hover:text-white transition-all flex items-center gap-2 shadow-sm"
                 >
                   <Dumbbell className="w-3.5 h-3.5 text-brand-red" />
                   <span>01 S&C</span>
                 </button>
                 <button
                   onClick={() => onStartAssessment('reathletisation')}
-                  className="px-3 py-1.5 rounded-lg bg-brand-steel/80 hover:bg-brand-steel border border-brand-silver/15 hover:border-brand-red/40 text-[11px] font-bold text-brand-silver hover:text-white transition-all flex items-center gap-1.5"
+                  className="px-3.5 py-2 rounded-xl bg-brand-steel/80 hover:bg-brand-steel border border-brand-silver/15 hover:border-brand-red/50 text-[11px] font-bold text-brand-silver hover:text-white transition-all flex items-center gap-2 shadow-sm"
                 >
                   <Activity className="w-3.5 h-3.5 text-brand-red" />
                   <span>02 Réathlétisation</span>
                 </button>
                 <button
                   onClick={() => onStartAssessment('private_coaching')}
-                  className="px-3 py-1.5 rounded-lg bg-brand-steel/80 hover:bg-brand-steel border border-brand-silver/15 hover:border-brand-red/40 text-[11px] font-bold text-brand-silver hover:text-white transition-all flex items-center gap-1.5"
+                  className="px-3.5 py-2 rounded-xl bg-brand-steel/80 hover:bg-brand-steel border border-brand-silver/15 hover:border-brand-red/50 text-[11px] font-bold text-brand-silver hover:text-white transition-all flex items-center gap-2 shadow-sm"
                 >
                   <UserCheck className="w-3.5 h-3.5 text-brand-red" />
                   <span>03 Private 1-on-1</span>
@@ -143,7 +143,7 @@ export const Hero: React.FC<HeroProps> = ({ onStartAssessment }) => {
 
           </div>
 
-          {/* Right Column: Hero Photograph of Mohamed Amine Boukraa */}
+          {/* Right Column: Hero Photograph of Mohamed Amine Boukraa (Authentic Track Asset) */}
           <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
@@ -158,8 +158,8 @@ export const Hero: React.FC<HeroProps> = ({ onStartAssessment }) => {
               {/* Main Image Frame */}
               <div className="relative rounded-3xl overflow-hidden border border-brand-silver/20 bg-brand-steel shadow-2xl">
                 <img
-                  src="/assets/hero-coach.jpg"
-                  alt="Mohamed Amine Boukraa — Strength & Conditioning Coach"
+                  src="/assets/boukraa-hero-portrait.jpg"
+                  alt="Mohamed Amine Boukraa — Strength & Conditioning Coach on athletic track"
                   className="w-full h-auto object-cover aspect-[4/5] object-top filter contrast-[1.03]"
                   loading="eager"
                 />
@@ -185,9 +185,9 @@ export const Hero: React.FC<HeroProps> = ({ onStartAssessment }) => {
                 </div>
 
                 {/* Top Coach Credential Tag */}
-                <div className="absolute top-4 left-4 rtl:left-auto rtl:right-4 bg-brand-navy/90 backdrop-blur-md px-3.5 py-1.5 rounded-lg border border-brand-silver/20 text-[11px] font-black tracking-wider text-brand-white uppercase flex items-center gap-2 shadow-lg">
+                <div className="absolute top-4 left-4 rtl:left-auto rtl:right-4 bg-brand-navy/90 backdrop-blur-md px-3.5 py-1.5 rounded-xl border border-brand-silver/20 text-[11px] font-black tracking-wider text-brand-white uppercase flex items-center gap-2 shadow-lg">
                   <span className="w-2 h-2 rounded-full bg-brand-red animate-pulse" />
-                  <span>EPS & S&C EXPERT</span>
+                  <span>EPS · S&C · FOOTBALL</span>
                 </div>
               </div>
 

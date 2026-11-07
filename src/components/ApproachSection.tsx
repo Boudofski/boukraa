@@ -29,10 +29,10 @@ export const ApproachSection: React.FC = () => {
           </p>
         </div>
 
-        {/* Feature Grid: Photo 2 + 3 Core Pillars */}
+        {/* Feature Grid: Photo 2 (Authentic Program Building Photo) + 3 Core Pillars */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-center mb-16 sm:mb-24">
           
-          {/* Photo 2: Program Building & Sports Science Analysis */}
+          {/* Photo 2: Real Computer Monitor Athlete Training Programme Analysis */}
           <motion.div
             initial={{ opacity: 0, x: -20 }}
             whileInView={{ opacity: 1, x: 0 }}
@@ -42,17 +42,22 @@ export const ApproachSection: React.FC = () => {
           >
             <div className="relative rounded-3xl overflow-hidden border border-brand-silver/20 bg-brand-steel shadow-2xl">
               <img
-                src="/assets/coach-program-building.jpg"
-                alt="Mohamed Amine Boukraa constructing training program and analyzing athletic metrics"
-                className="w-full h-auto object-cover aspect-[16/10] filter contrast-[1.02]"
+                src="/assets/boukraa-program-building.jpg"
+                alt="Mohamed Amine Boukraa designing athlete training programme on computer screen with sports science books and BOUKRAA notebook"
+                className="w-full h-auto object-cover aspect-[16/9] filter contrast-[1.02]"
                 loading="lazy"
               />
 
               {/* Bottom Overlay Label */}
               <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-brand-navy via-brand-navy/85 to-transparent p-5 sm:p-6 pt-14 backdrop-blur-[2px]">
                 <div className="flex items-center justify-between">
-                  <div className="text-xs sm:text-sm font-black uppercase tracking-wider text-brand-white">
-                    Programmation & Analyse Individualisée
+                  <div>
+                    <div className="text-xs sm:text-sm font-black uppercase tracking-wider text-brand-white">
+                      Programmation & Analyse Individualisée
+                    </div>
+                    <div className="text-[11px] text-brand-silver/75 font-mono">
+                      Trap Bar · Fentes Bulgares · RPE & Vélocité
+                    </div>
                   </div>
                   <span className="text-[10px] sm:text-[11px] font-mono font-bold text-brand-red bg-brand-steel/90 px-2.5 py-1 rounded border border-brand-red/30">
                     SPORTS SCIENCE
