@@ -3,15 +3,10 @@ import { Header } from './components/Header';
 import { Hero } from './components/Hero';
 import { StatsBar } from './components/StatsBar';
 import { ServicesSection } from './components/ServicesSection';
-import { AthleteEvaluator } from './components/AthleteEvaluator';
-import { PeriodizationRoadmap } from './components/PeriodizationRoadmap';
-import { FieldActionSection } from './components/FieldActionSection';
 import { HowItWorks } from './components/HowItWorks';
 import { ApproachSection } from './components/ApproachSection';
-import { PrivateCoachingSection } from './components/PrivateCoachingSection';
-import { FAQSection } from './components/FAQSection';
-import { CoursesSection } from './components/CoursesSection';
 import { AboutSection } from './components/AboutSection';
+import { FAQSection } from './components/FAQSection';
 import { FinalCTA } from './components/FinalCTA';
 import { Footer } from './components/Footer';
 import { AssessmentModal } from './components/AssessmentModal';
@@ -60,38 +55,23 @@ export const App: React.FC = () => {
         {/* 4. Choose What You Need / 3 Core Services */}
         <ServicesSection onSelectService={(id) => handleStartAssessment(id)} />
 
-        {/* 5. Interactive 30-Second Athlete Assessment Configurator */}
-        <AthleteEvaluator onSelectService={(id) => handleStartAssessment(id)} />
-
-        {/* 6. Periodization & Sports Science 4-Stage Lifecycle */}
-        <PeriodizationRoadmap />
-
-        {/* 7. Real Pitch & Field Coaching Experience (Authentic On-Pitch Action Gallery) */}
-        <FieldActionSection />
-
-        {/* 8. How It Works (3 Steps) */}
+        {/* 5. How It Works (3 Steps) */}
         <HowItWorks />
 
-        {/* 9. BOUKRAA Approach (Photo 2: Program Building on PC, 3 Pillars, Quote, 2 Pathways & Pricing Policy) */}
+        {/* 6. BOUKRAA Approach (Photo 2: Program Building on PC, 3 Pillars, Quote, 2 Pathways & Pricing Policy) */}
         <ApproachSection />
 
-        {/* 10. Private Coaching In-Depth Focus (1-on-1 & Tactics Board) */}
-        <PrivateCoachingSection onStartRequest={() => handleStartAssessment('private_coaching')} />
-
-        {/* 11. Frequently Asked Questions (Animated Accordion) */}
-        <FAQSection />
-
-        {/* 12. Courses — Coming Soon Notification Waitlist */}
-        <CoursesSection />
-
-        {/* 13. About Coach Mohamed Amine Boukraa & Pitch Portrait */}
+        {/* 7. About Coach Mohamed Amine Boukraa & Authentic Field + Tactics Gallery */}
         <AboutSection />
 
-        {/* 14. Final Conversion CTA */}
+        {/* 8. Frequently Asked Questions (Animated Accordion) */}
+        <FAQSection />
+
+        {/* 9. Final Conversion CTA */}
         <FinalCTA onSelectService={(id) => handleStartAssessment(id)} />
       </main>
 
-      {/* 15. Footer */}
+      {/* 10. Footer */}
       <Footer onOpenAdmin={() => setIsAdminOpen(true)} />
 
       {/* Floating Mobile Quick Assessment Pill */}

@@ -55,10 +55,9 @@ export const Header: React.FC<HeaderProps> = ({ onStartAssessment, onOpenAdmin }
 
   const navLinks = [
     { label: t.nav.programs, href: '#programs' },
-    { label: t.nav.privateCoaching, href: '#private-coaching' },
-    { label: t.nav.methodology, href: '#methodology' },
-    { label: t.nav.courses, href: '#courses' },
+    { label: t.nav.methodology, href: '#approach' },
     { label: t.nav.about, href: '#about' },
+    { label: t.nav.faq, href: '#faq' },
   ];
 
   return (
@@ -85,8 +84,8 @@ export const Header: React.FC<HeaderProps> = ({ onStartAssessment, onOpenAdmin }
             />
           </a>
 
-          {/* Desktop Navigation Links — Refined, Elegant, Proportionate */}
-          <nav className="hidden lg:flex items-center gap-7">
+          {/* Desktop Navigation Links — 4 Clean, Essential Links */}
+          <nav className="hidden lg:flex items-center gap-8">
             {navLinks.map((item) => (
               <button
                 key={item.href}
@@ -167,7 +166,7 @@ export const Header: React.FC<HeaderProps> = ({ onStartAssessment, onOpenAdmin }
       {/* Mobile Drawer (Refined, Clean Overlay on Mobile) */}
       {mobileMenuOpen && (
         <div className="fixed inset-x-0 top-[57px] bottom-0 z-50 bg-brand-navy/98 backdrop-blur-2xl border-t border-white/[0.08] flex flex-col justify-between p-5 overflow-y-auto sm:hidden">
-          <nav className="flex flex-col space-y-1.5 pt-2">
+          <nav className="flex flex-col space-y-2 pt-2">
             {navLinks.map((item) => (
               <button
                 key={item.href}
@@ -177,12 +176,6 @@ export const Header: React.FC<HeaderProps> = ({ onStartAssessment, onOpenAdmin }
                 {item.label}
               </button>
             ))}
-            <button
-              onClick={() => handleNavClick('#faq')}
-              className="w-full text-left rtl:text-right py-3 px-4 text-sm font-semibold tracking-normal text-white/90 hover:text-white rounded-xl bg-brand-surface/50 hover:bg-brand-surface border border-white/[0.06] transition-colors"
-            >
-              {t.nav.faq}
-            </button>
           </nav>
 
           {/* Bottom Actions inside Mobile Drawer */}
