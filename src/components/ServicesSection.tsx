@@ -52,24 +52,24 @@ export const ServicesSection: React.FC<ServicesSectionProps> = ({ onSelectServic
   ];
 
   return (
-    <section id="programs" className="py-20 sm:py-28 bg-brand-navy relative border-t border-brand-silver/10 overflow-hidden">
+    <section id="programs" className="py-24 sm:py-32 bg-brand-navy relative border-t border-white/[0.08] overflow-hidden">
       {/* Background ambient lighting */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[500px] bg-brand-steel/40 rounded-full blur-[140px] pointer-events-none" />
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[750px] h-[550px] bg-brand-red/[0.04] rounded-full blur-[160px] pointer-events-none" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         
         {/* Section Header */}
-        <div className="text-center max-w-3xl mx-auto mb-14 sm:mb-20">
-          <div className="inline-flex items-center gap-2 px-3 py-1 bg-brand-steel border border-brand-silver/15 rounded-md text-xs font-black tracking-widest text-brand-red uppercase mb-4">
-            <span className="w-1.5 h-1.5 rounded-full bg-brand-red" />
+        <div className="text-center max-w-3xl mx-auto mb-16 sm:mb-20">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 bg-brand-surface border border-white/[0.08] rounded-full text-xs font-black tracking-widest text-brand-red uppercase mb-4 shadow-sm">
+            <span className="w-2 h-2 rounded-full bg-brand-red" />
             <span>{t.services.sectionBadge}</span>
           </div>
 
-          <h2 className="text-2xl sm:text-4xl lg:text-5xl font-black text-brand-white uppercase tracking-tight mb-4">
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-white uppercase tracking-tight mb-4">
             {t.services.sectionTitle}
           </h2>
 
-          <p className="text-sm sm:text-base text-brand-silver/90 font-medium leading-relaxed max-w-2xl mx-auto">
+          <p className="text-base sm:text-lg text-brand-silver/90 font-medium leading-relaxed max-w-2xl mx-auto">
             {t.services.sectionSubtitle}
           </p>
         </div>
@@ -86,10 +86,10 @@ export const ServicesSection: React.FC<ServicesSectionProps> = ({ onSelectServic
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: idx * 0.15 }}
                 whileHover={{ y: -6 }}
-                className={`relative flex flex-col justify-between rounded-3xl p-6 sm:p-8 bg-brand-steel/80 backdrop-blur-xl border transition-all duration-300 group shadow-2xl ${
+                className={`relative flex flex-col justify-between rounded-3xl p-6 sm:p-8 bg-brand-surface/90 backdrop-blur-xl border transition-all duration-300 group shadow-2xl ${
                   srv.popular
                     ? 'border-brand-red/60 shadow-brand-red/10'
-                    : 'border-brand-silver/15 hover:border-brand-red/40'
+                    : 'border-white/[0.08] hover:border-brand-red/50'
                 }`}
               >
                 {/* Top indicator bar */}
@@ -101,18 +101,18 @@ export const ServicesSection: React.FC<ServicesSectionProps> = ({ onSelectServic
                     <span className="text-2xl sm:text-3xl font-black text-brand-red font-mono tracking-tighter">
                       {srv.code}
                     </span>
-                    <span className="px-3 py-1 text-[10px] sm:text-[11px] font-mono font-bold tracking-wider uppercase rounded-full bg-brand-navy border border-brand-silver/15 text-brand-silver">
+                    <span className="px-3 py-1 text-[10px] sm:text-[11px] font-mono font-bold tracking-wider uppercase rounded-full bg-brand-navy border border-white/[0.08] text-brand-silver">
                       {srv.badge}
                     </span>
                   </div>
 
                   {/* Service Icon */}
-                  <div className="w-14 h-14 rounded-2xl bg-brand-navy border border-brand-silver/15 flex items-center justify-center text-brand-silver group-hover:text-brand-red group-hover:border-brand-red/40 transition-colors mb-6 shadow-inner">
+                  <div className="w-14 h-14 rounded-2xl bg-brand-navy border border-white/[0.08] flex items-center justify-center text-brand-silver group-hover:text-brand-red group-hover:border-brand-red/40 transition-colors mb-6 shadow-inner">
                     <Icon className="w-7 h-7" />
                   </div>
 
                   {/* Title */}
-                  <h3 className="text-lg sm:text-xl font-black text-brand-white uppercase tracking-wide mb-3 leading-snug">
+                  <h3 className="text-lg sm:text-xl font-black text-white uppercase tracking-wide mb-3 leading-snug">
                     {srv.title}
                   </h3>
 
@@ -123,10 +123,10 @@ export const ServicesSection: React.FC<ServicesSectionProps> = ({ onSelectServic
 
                   {/* 4 Feature Bullets */}
                   {srv.features && (
-                    <div className="space-y-2.5 mb-6 pt-4 border-t border-brand-silver/10">
+                    <div className="space-y-2.5 mb-6 pt-5 border-t border-white/[0.08]">
                       {srv.features.map((feat, fIdx) => (
-                        <div key={fIdx} className="flex items-start gap-2.5 text-xs text-brand-silver/90 font-medium">
-                          <div className="w-4 h-4 rounded-full bg-brand-navy border border-brand-silver/20 flex items-center justify-center text-brand-red flex-shrink-0 mt-0.5">
+                        <div key={fIdx} className="flex items-start gap-2.5 text-xs sm:text-[13px] text-brand-silver/90 font-medium">
+                          <div className="w-4 h-4 rounded-full bg-brand-navy border border-white/[0.12] flex items-center justify-center text-brand-red flex-shrink-0 mt-0.5">
                             <Check className="w-2.5 h-2.5" />
                           </div>
                           <span>{feat}</span>
@@ -137,7 +137,7 @@ export const ServicesSection: React.FC<ServicesSectionProps> = ({ onSelectServic
 
                   {/* Disclaimer for Reathletisation */}
                   {srv.hasDisclaimer && srv.disclaimer && (
-                    <div className="mb-6 p-4 rounded-xl bg-brand-navy border border-brand-red/40 flex items-start gap-3">
+                    <div className="mb-6 p-4 rounded-2xl bg-brand-navy border border-brand-red/40 flex items-start gap-3">
                       <ShieldAlert className="w-4 h-4 text-brand-red flex-shrink-0 mt-0.5" />
                       <p className="text-[11px] text-brand-silver/90 leading-relaxed font-medium">
                         {srv.disclaimer}
@@ -147,10 +147,10 @@ export const ServicesSection: React.FC<ServicesSectionProps> = ({ onSelectServic
                 </div>
 
                 {/* Bottom CTA Button */}
-                <div className="pt-6 border-t border-brand-silver/10">
+                <div className="pt-6 border-t border-white/[0.08]">
                   <button
                     onClick={() => onSelectService(srv.id)}
-                    className="w-full flex items-center justify-center gap-2.5 py-4 px-5 bg-brand-navy hover:bg-brand-red text-brand-white font-extrabold text-xs sm:text-sm tracking-wider uppercase rounded-xl border border-brand-silver/20 hover:border-brand-red transition-all duration-200 group-hover:shadow-lg active:scale-[0.99]"
+                    className="w-full flex items-center justify-center gap-2.5 py-4 px-5 bg-white/5 hover:bg-brand-red text-white font-black text-xs sm:text-sm tracking-wider uppercase rounded-xl border border-white/[0.1] hover:border-brand-red transition-all duration-200 group-hover:shadow-lg active:scale-[0.99]"
                   >
                     <span>{srv.cta}</span>
                     <ArrowRight className={`w-4 h-4 transition-transform duration-200 group-hover:translate-x-1 ${isRtl ? 'rotate-180 group-hover:-translate-x-1' : ''}`} />

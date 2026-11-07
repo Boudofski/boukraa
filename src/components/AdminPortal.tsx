@@ -1,22 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { useLanguage } from '../context/LanguageContext';
-import { AssessmentSubmission, SubmissionStatus, ServiceId } from '../types';
+import { AssessmentSubmission, SubmissionStatus } from '../types';
 import {
   X,
   Lock,
-  Unlock,
   Search,
-  Filter,
   Download,
   MessageSquare,
   Eye,
   Trash2,
-  Calendar,
-  User,
-  Activity,
-  FileSpreadsheet,
-  CheckCircle,
-  AlertTriangle,
   RefreshCw,
 } from 'lucide-react';
 
@@ -26,7 +18,7 @@ interface AdminPortalProps {
 }
 
 export const AdminPortal: React.FC<AdminPortalProps> = ({ isOpen, onClose }) => {
-  const { locale, t, isRtl } = useLanguage();
+  const { locale, t } = useLanguage();
   const [token, setToken] = useState<string | null>(() => sessionStorage.getItem('boukraa_admin_token'));
   const [password, setPassword] = useState('');
   const [authError, setAuthError] = useState('');
@@ -80,6 +72,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ isOpen, onClose }) => 
     }
   }, [isOpen, token, serviceFilter, statusFilter, searchQuery]);
 
+  // Synchronize notes when modal opens for selected submission
   useEffect(() => {
     if (selectedSubmission) {
       setCoachNotesText(selectedSubmission.coachNotes || '');
@@ -92,7 +85,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ isOpen, onClose }) => 
     e.preventDefault();
     setAuthError('');
     try {
-      const res = await fetch('/api/admin/auth', {
+      const res = await fetch('/api/admin/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ password }),
@@ -103,23 +96,24 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ isOpen, onClose }) => 
         sessionStorage.setItem('boukraa_admin_token', data.token);
         fetchSubmissions(data.token);
       } else {
-        setAuthError(t.admin.invalidPassword);
+        setAuthError(data.error || 'Mot de passe invalide');
       }
-    } catch {
-      setAuthError('Erreur de connexion au serveur');
+    } catch (err) {
+      setAuthError('Erreur de connexion');
     }
   };
 
   const handleLogout = () => {
     setToken(null);
     sessionStorage.removeItem('boukraa_admin_token');
-    setPassword('');
+    setSubmissions([]);
+    setSelectedSubmission(null);
   };
 
   const handleStatusChange = async (id: string, newStatus: SubmissionStatus) => {
     if (!token) return;
     try {
-      const res = await fetch(`/api/admin/submissions/${id}/status`, {
+      const res = await fetch(`/api/admin/submissions/${id}`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
@@ -131,7 +125,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ isOpen, onClose }) => 
         setSubmissions((prev) =>
           prev.map((sub) => (sub.id === id ? { ...sub, status: newStatus } : sub))
         );
-        if (selectedSubmission && selectedSubmission.id === id) {
+        if (selectedSubmission?.id === id) {
           setSelectedSubmission((prev) => (prev ? { ...prev, status: newStatus } : null));
         }
       }
@@ -144,7 +138,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ isOpen, onClose }) => 
     if (!token || !selectedSubmission) return;
     setIsSavingNotes(true);
     try {
-      const res = await fetch(`/api/admin/submissions/${selectedSubmission.id}/notes`, {
+      const res = await fetch(`/api/admin/submissions/${selectedSubmission.id}`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
@@ -213,11 +207,11 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ isOpen, onClose }) => 
   };
 
   return (
-    <div className="fixed inset-0 z-50 overflow-y-auto bg-brand-navy/95 backdrop-blur-md flex items-center justify-center p-3 sm:p-6 animate-in fade-in duration-200">
-      <div className="relative w-full max-w-6xl bg-brand-navy rounded-2xl border border-brand-silver/15 shadow-2xl overflow-hidden flex flex-col max-h-[95vh]">
+    <div className="fixed inset-0 z-50 overflow-y-auto bg-black/90 backdrop-blur-xl flex items-center justify-center p-3 sm:p-6 animate-in fade-in duration-200">
+      <div className="relative w-full max-w-6xl bg-brand-surface rounded-3xl border border-white/[0.1] shadow-2xl overflow-hidden flex flex-col max-h-[95vh]">
         
         {/* Top Header */}
-        <div className="px-6 py-4 bg-brand-steel border-b border-brand-silver/10 flex items-center justify-between">
+        <div className="px-6 py-4 bg-brand-surface/90 border-b border-white/[0.08] flex items-center justify-between">
           <div className="flex items-center gap-3">
             <img src="/logo-mark.png" alt="BOUKRAA" className="h-7 w-auto object-contain" />
             <div>
@@ -237,14 +231,14 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ isOpen, onClose }) => 
             {token && (
               <button
                 onClick={handleLogout}
-                className="px-3 py-1.5 text-xs font-bold text-brand-silver hover:text-white bg-brand-navy/60 hover:bg-brand-navy rounded border border-brand-silver/15 transition-colors"
+                className="px-3 py-1.5 text-xs font-bold text-brand-silver hover:text-white bg-white/5 hover:bg-white/10 rounded-lg border border-white/[0.08] transition-colors"
               >
                 {t.admin.logoutBtn}
               </button>
             )}
             <button
               onClick={onClose}
-              className="p-1.5 text-brand-gray hover:text-white rounded-lg hover:bg-brand-navy transition-colors"
+              className="p-1.5 text-brand-gray hover:text-white rounded-xl hover:bg-white/5 transition-colors"
             >
               <X className="w-5 h-5" />
             </button>
@@ -256,7 +250,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ isOpen, onClose }) => 
           {!token ? (
             /* Login Form */
             <div className="max-w-md mx-auto py-12 text-center">
-              <div className="w-14 h-14 rounded-full bg-brand-steel border border-brand-red/40 flex items-center justify-center mx-auto mb-6 text-brand-red">
+              <div className="w-14 h-14 rounded-full bg-brand-navy border border-brand-red/40 flex items-center justify-center mx-auto mb-6 text-brand-red shadow-inner">
                 <Lock className="w-6 h-6" />
               </div>
 
@@ -274,18 +268,18 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ isOpen, onClose }) => 
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="••••••••••••"
                   autoFocus
-                  className="w-full px-4 py-3 bg-brand-steel border border-brand-silver/20 focus:border-brand-red rounded-lg text-white text-center text-lg font-mono tracking-widest focus:outline-none"
+                  className="w-full px-4 py-3.5 bg-brand-navy border border-white/[0.12] focus:border-brand-red rounded-xl text-white text-center text-lg font-mono tracking-widest focus:outline-none"
                 />
 
                 {authError && (
-                  <div className="p-2.5 rounded bg-red-950/60 border border-brand-red/40 text-red-200 text-xs font-semibold">
+                  <div className="p-3 rounded-xl bg-red-950/60 border border-brand-red/40 text-red-200 text-xs font-semibold">
                     {authError}
                   </div>
                 )}
 
                 <button
                   type="submit"
-                  className="w-full py-3 bg-brand-red hover:bg-red-600 text-white font-extrabold text-sm uppercase tracking-wider rounded transition-all shadow-lg"
+                  className="w-full py-3.5 bg-brand-red hover:bg-brand-redHover text-white font-black text-sm uppercase tracking-wider rounded-xl transition-all shadow-lg shadow-brand-red/30"
                 >
                   {t.admin.loginBtn}
                 </button>
@@ -297,29 +291,29 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ isOpen, onClose }) => 
               
               {/* Top Stats Overview */}
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-                <div className="p-4 rounded-xl bg-brand-steel border border-brand-silver/10">
-                  <div className="text-xs text-brand-gray uppercase font-bold">Total Reçus</div>
+                <div className="p-4 rounded-2xl bg-brand-navy border border-white/[0.08]">
+                  <div className="text-xs text-brand-gray uppercase font-bold font-mono">Total Reçus</div>
                   <div className="text-2xl font-black text-white font-mono mt-1">
                     {submissions.length}
                   </div>
                 </div>
 
-                <div className="p-4 rounded-xl bg-brand-steel border border-red-500/30">
-                  <div className="text-xs text-red-400 uppercase font-bold">Nouveaux</div>
+                <div className="p-4 rounded-2xl bg-brand-navy border border-red-500/30">
+                  <div className="text-xs text-red-400 uppercase font-bold font-mono">Nouveaux</div>
                   <div className="text-2xl font-black text-red-400 font-mono mt-1">
                     {submissions.filter((s) => s.status === 'NEW').length}
                   </div>
                 </div>
 
-                <div className="p-4 rounded-xl bg-brand-steel border border-blue-500/30">
-                  <div className="text-xs text-blue-400 uppercase font-bold">Contactés</div>
+                <div className="p-4 rounded-2xl bg-brand-navy border border-blue-500/30">
+                  <div className="text-xs text-blue-400 uppercase font-bold font-mono">Contactés</div>
                   <div className="text-2xl font-black text-blue-400 font-mono mt-1">
                     {submissions.filter((s) => s.status === 'CONTACTED').length}
                   </div>
                 </div>
 
-                <div className="p-4 rounded-xl bg-brand-steel border border-emerald-500/30">
-                  <div className="text-xs text-emerald-400 uppercase font-bold">Acceptés / Actifs</div>
+                <div className="p-4 rounded-2xl bg-brand-navy border border-emerald-500/30">
+                  <div className="text-xs text-emerald-400 uppercase font-bold font-mono">Acceptés / Actifs</div>
                   <div className="text-2xl font-black text-emerald-400 font-mono mt-1">
                     {submissions.filter((s) => s.status === 'ACCEPTED' || s.status === 'ACTIVE').length}
                   </div>
@@ -327,7 +321,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ isOpen, onClose }) => 
               </div>
 
               {/* Filters & Actions Bar */}
-              <div className="flex flex-col md:flex-row gap-3 items-stretch md:items-center justify-between bg-brand-steel/60 p-4 rounded-xl border border-brand-silver/10">
+              <div className="flex flex-col md:flex-row gap-3 items-stretch md:items-center justify-between bg-brand-navy p-4 rounded-2xl border border-white/[0.08]">
                 <div className="flex flex-wrap items-center gap-3">
                   {/* Search box */}
                   <div className="relative flex-1 sm:w-64">
@@ -337,7 +331,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ isOpen, onClose }) => 
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
                       placeholder={t.admin.searchPlaceholder}
-                      className="w-full pl-9 pr-3 rtl:pl-3 rtl:pr-9 py-2 bg-brand-navy border border-brand-silver/20 rounded-lg text-xs text-white placeholder:text-brand-gray/60 focus:outline-none focus:border-brand-red"
+                      className="w-full pl-9 pr-3 rtl:pl-3 rtl:pr-9 py-2.5 bg-brand-surface border border-white/[0.1] rounded-xl text-xs text-white placeholder:text-brand-gray/60 focus:outline-none focus:border-brand-red"
                     />
                   </div>
 
@@ -345,7 +339,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ isOpen, onClose }) => 
                   <select
                     value={serviceFilter}
                     onChange={(e) => setServiceFilter(e.target.value)}
-                    className="px-3 py-2 bg-brand-navy border border-brand-silver/20 rounded-lg text-xs font-bold text-brand-silver focus:outline-none"
+                    className="px-3 py-2.5 bg-brand-surface border border-white/[0.1] rounded-xl text-xs font-bold text-brand-silver focus:outline-none"
                   >
                     <option value="ALL">{t.admin.allServices}</option>
                     <option value="strength_conditioning">Strength & Conditioning</option>
@@ -357,7 +351,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ isOpen, onClose }) => 
                   <select
                     value={statusFilter}
                     onChange={(e) => setStatusFilter(e.target.value)}
-                    className="px-3 py-2 bg-brand-navy border border-brand-silver/20 rounded-lg text-xs font-bold text-brand-silver focus:outline-none"
+                    className="px-3 py-2.5 bg-brand-surface border border-white/[0.1] rounded-xl text-xs font-bold text-brand-silver focus:outline-none"
                   >
                     <option value="ALL">{t.admin.allStatuses}</option>
                     {Object.entries(t.admin.statusLabels).map(([key, label]) => (
@@ -371,7 +365,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ isOpen, onClose }) => 
                 <div className="flex items-center gap-2">
                   <button
                     onClick={() => token && fetchSubmissions(token)}
-                    className="p-2 bg-brand-navy hover:bg-brand-navy/70 border border-brand-silver/15 rounded text-brand-silver hover:text-white"
+                    className="p-2.5 bg-brand-surface hover:bg-white/10 border border-white/[0.08] rounded-xl text-brand-silver hover:text-white"
                     title="Actualiser"
                   >
                     <RefreshCw className={`w-4 h-4 ${isLoading ? 'animate-spin' : ''}`} />
@@ -379,7 +373,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ isOpen, onClose }) => 
 
                   <button
                     onClick={handleExportCsv}
-                    className="inline-flex items-center gap-1.5 px-3 py-2 bg-brand-steel hover:bg-brand-steel/80 border border-brand-silver/20 rounded text-xs font-bold text-white transition-colors"
+                    className="inline-flex items-center gap-1.5 px-3.5 py-2.5 bg-white/5 hover:bg-white/10 border border-white/[0.1] rounded-xl text-xs font-bold text-white transition-colors"
                   >
                     <Download className="w-3.5 h-3.5" />
                     <span>{t.admin.exportCsv}</span>
@@ -388,10 +382,10 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ isOpen, onClose }) => 
               </div>
 
               {/* Submissions Table */}
-              <div className="overflow-x-auto rounded-xl border border-brand-silver/15 bg-brand-steel/40">
+              <div className="overflow-x-auto rounded-2xl border border-white/[0.08] bg-brand-navy">
                 <table className="w-full text-left rtl:text-right border-collapse text-xs">
                   <thead>
-                    <tr className="bg-brand-steel text-brand-gray uppercase tracking-wider border-b border-brand-silver/15">
+                    <tr className="bg-brand-surface text-brand-gray uppercase tracking-wider border-b border-white/[0.08]">
                       <th className="p-3.5 font-bold">{t.admin.table.id}</th>
                       <th className="p-3.5 font-bold">{t.admin.table.client}</th>
                       <th className="p-3.5 font-bold">{t.admin.table.service}</th>
@@ -401,7 +395,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ isOpen, onClose }) => 
                       <th className="p-3.5 font-bold text-right rtl:text-left">{t.admin.table.actions}</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-brand-silver/10">
+                  <tbody className="divide-y divide-white/[0.06]">
                     {submissions.length === 0 ? (
                       <tr>
                         <td colSpan={7} className="text-center py-12 text-brand-gray">
@@ -410,7 +404,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ isOpen, onClose }) => 
                       </tr>
                     ) : (
                       submissions.map((sub) => (
-                        <tr key={sub.id} className="hover:bg-brand-steel/70 transition-colors">
+                        <tr key={sub.id} className="hover:bg-white/5 transition-colors">
                           <td className="p-3.5 font-mono font-bold text-brand-red">
                             {sub.id}
                           </td>
@@ -421,7 +415,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ isOpen, onClose }) => 
                             </div>
                           </td>
                           <td className="p-3.5">
-                            <span className="px-2 py-0.5 rounded bg-brand-navy border border-brand-silver/15 text-[11px] font-bold text-brand-silver uppercase">
+                            <span className="px-2.5 py-1 rounded bg-brand-surface border border-white/[0.08] text-[11px] font-bold text-brand-silver uppercase">
                               {sub.service === 'strength_conditioning'
                                 ? 'S&C'
                                 : sub.service === 'reathletisation'
@@ -443,7 +437,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ isOpen, onClose }) => 
                             <select
                               value={sub.status}
                               onChange={(e) => handleStatusChange(sub.id, e.target.value as SubmissionStatus)}
-                              className={`px-2.5 py-1 rounded text-[11px] font-black border uppercase focus:outline-none ${
+                              className={`px-2.5 py-1 rounded-lg text-[11px] font-black border uppercase focus:outline-none ${
                                 statusColors[sub.status] || 'bg-brand-navy text-white'
                               }`}
                             >
@@ -458,7 +452,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ isOpen, onClose }) => 
                             <button
                               onClick={() => openClientWhatsApp(sub)}
                               title="Contacter sur WhatsApp"
-                              className="p-1.5 bg-emerald-600/30 text-emerald-400 hover:bg-emerald-600 hover:text-white rounded border border-emerald-500/30 transition-colors inline-flex items-center"
+                              className="p-2 bg-emerald-600/30 text-emerald-400 hover:bg-emerald-600 hover:text-white rounded-lg border border-emerald-500/30 transition-colors inline-flex items-center"
                             >
                               <MessageSquare className="w-3.5 h-3.5" />
                             </button>
@@ -466,7 +460,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ isOpen, onClose }) => 
                             <button
                               onClick={() => setSelectedSubmission(sub)}
                               title="Voir la fiche complète"
-                              className="p-1.5 bg-brand-navy text-brand-silver hover:text-white hover:bg-brand-red rounded border border-brand-silver/20 transition-colors inline-flex items-center"
+                              className="p-2 bg-brand-surface text-brand-silver hover:text-white hover:bg-brand-red rounded-lg border border-white/[0.1] transition-colors inline-flex items-center"
                             >
                               <Eye className="w-3.5 h-3.5" />
                             </button>
@@ -486,10 +480,10 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ isOpen, onClose }) => 
 
       {/* Athlete Full Profile Details Modal */}
       {selectedSubmission && (
-        <div className="fixed inset-0 z-60 bg-black/80 backdrop-blur-sm flex items-center justify-center p-3 sm:p-6 animate-in fade-in">
-          <div className="bg-brand-steel rounded-2xl border border-brand-silver/20 shadow-2xl max-w-3xl w-full max-h-[90vh] flex flex-col overflow-hidden">
+        <div className="fixed inset-0 z-60 bg-black/85 backdrop-blur-md flex items-center justify-center p-3 sm:p-6 animate-in fade-in">
+          <div className="bg-brand-surface rounded-3xl border border-white/[0.12] shadow-2xl max-w-3xl w-full max-h-[90vh] flex flex-col overflow-hidden">
             
-            <div className="px-6 py-4 bg-brand-navy border-b border-brand-silver/15 flex items-center justify-between">
+            <div className="px-6 py-4 bg-brand-navy border-b border-white/[0.08] flex items-center justify-between">
               <div>
                 <span className="text-[10px] font-mono font-bold text-brand-red uppercase tracking-wider">
                   DOSSIER ATHLÈTE · {selectedSubmission.id}
@@ -509,7 +503,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ isOpen, onClose }) => 
             <div className="p-6 overflow-y-auto space-y-6 flex-1 text-left rtl:text-right">
               
               {/* Quick Action Ribbon */}
-              <div className="flex flex-wrap items-center justify-between gap-3 p-4 rounded-xl bg-brand-navy border border-brand-silver/15">
+              <div className="flex flex-wrap items-center justify-between gap-3 p-4 rounded-2xl bg-brand-navy border border-white/[0.08]">
                 <div>
                   <div className="text-xs text-brand-gray font-medium">WhatsApp direct :</div>
                   <div className="font-mono text-sm font-bold text-white">
@@ -520,7 +514,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ isOpen, onClose }) => 
                 <div className="flex items-center gap-2">
                   <button
                     onClick={() => openClientWhatsApp(selectedSubmission)}
-                    className="inline-flex items-center gap-2 px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs uppercase tracking-wider rounded shadow transition-all"
+                    className="inline-flex items-center gap-2 px-4 py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs uppercase tracking-wider rounded-xl shadow transition-all"
                   >
                     <MessageSquare className="w-4 h-4" />
                     <span>{t.admin.detailsModal.openWhatsApp}</span>
@@ -528,7 +522,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ isOpen, onClose }) => 
 
                   <button
                     onClick={() => handleDelete(selectedSubmission.id)}
-                    className="p-2 text-brand-gray hover:text-red-400 bg-brand-steel rounded border border-brand-silver/10"
+                    className="p-2.5 text-brand-gray hover:text-red-400 bg-brand-surface rounded-xl border border-white/[0.08]"
                     title={t.admin.detailsModal.delete}
                   >
                     <Trash2 className="w-4 h-4" />
@@ -546,7 +540,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ isOpen, onClose }) => 
                   {Object.entries(selectedSubmission.answers).map(([key, val]) => (
                     <div
                       key={key}
-                      className="p-3.5 rounded-lg bg-brand-navy/70 border border-brand-silver/10"
+                      className="p-4 rounded-xl bg-brand-navy border border-white/[0.08]"
                     >
                       <div className="text-[11px] font-semibold text-brand-gray uppercase mb-1">
                         {key}
@@ -560,7 +554,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ isOpen, onClose }) => 
               </div>
 
               {/* Coach Private Notes Field */}
-              <div className="pt-4 border-t border-brand-silver/10">
+              <div className="pt-4 border-t border-white/[0.08]">
                 <label className="block text-xs font-black uppercase tracking-wider text-brand-silver mb-2">
                   {t.admin.detailsModal.coachNotesLabel}
                 </label>
@@ -569,13 +563,13 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ isOpen, onClose }) => 
                   value={coachNotesText}
                   onChange={(e) => setCoachNotesText(e.target.value)}
                   placeholder={t.admin.detailsModal.notesPlaceholder}
-                  className="w-full px-4 py-3 bg-brand-navy border border-brand-silver/20 rounded-lg text-xs sm:text-sm text-white placeholder:text-brand-gray/50 focus:outline-none focus:border-brand-red"
+                  className="w-full px-4 py-3 bg-brand-navy border border-white/[0.1] rounded-xl text-xs sm:text-sm text-white placeholder:text-brand-gray/50 focus:outline-none focus:border-brand-red"
                 />
-                <div className="mt-2 flex justify-end">
+                <div className="mt-2.5 flex justify-end">
                   <button
                     onClick={handleSaveNotes}
                     disabled={isSavingNotes}
-                    className="px-4 py-1.5 bg-brand-steel hover:bg-brand-red text-white text-xs font-bold rounded uppercase tracking-wider transition-colors"
+                    className="px-5 py-2 bg-brand-red hover:bg-brand-redHover text-white text-xs font-bold rounded-xl uppercase tracking-wider transition-colors shadow-md shadow-brand-red/20"
                   >
                     {isSavingNotes ? 'Enregistrement...' : 'Sauvegarder la note'}
                   </button>

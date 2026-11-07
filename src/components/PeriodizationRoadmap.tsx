@@ -9,7 +9,7 @@ export const PeriodizationRoadmap: React.FC = () => {
   const icons = [Search, Layers, Zap, SlidersHorizontal];
 
   return (
-    <section id="methodology" className="py-20 sm:py-28 bg-brand-navy relative border-t border-brand-silver/10 overflow-hidden">
+    <section id="methodology" className="py-24 sm:py-32 bg-brand-navy relative border-t border-white/[0.08] overflow-hidden">
       {/* Background tech grid */}
       <div className="absolute inset-0 bg-tech-grid mask-radial opacity-30 pointer-events-none" />
 
@@ -17,16 +17,16 @@ export const PeriodizationRoadmap: React.FC = () => {
         
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto mb-16 sm:mb-20">
-          <div className="inline-flex items-center gap-2 px-3 py-1 bg-brand-steel border border-brand-silver/15 rounded-md text-xs font-black tracking-widest text-brand-red uppercase mb-4">
-            <span className="w-1.5 h-1.5 rounded-full bg-brand-red" />
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 bg-brand-surface border border-white/[0.08] rounded-full text-xs font-black tracking-widest text-brand-red uppercase mb-4 shadow-sm">
+            <span className="w-2 h-2 rounded-full bg-brand-red" />
             <span>{t.periodization.badge}</span>
           </div>
 
-          <h2 className="text-2xl sm:text-4xl lg:text-5xl font-black text-brand-white uppercase tracking-tight mb-4">
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-white uppercase tracking-tight mb-4">
             {t.periodization.title}
           </h2>
 
-          <p className="text-sm sm:text-base text-brand-silver/90 font-medium leading-relaxed max-w-2xl mx-auto">
+          <p className="text-base sm:text-lg text-brand-silver/90 font-medium leading-relaxed max-w-2xl mx-auto">
             {t.periodization.subtitle}
           </p>
         </div>
@@ -46,7 +46,7 @@ export const PeriodizationRoadmap: React.FC = () => {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: idx * 0.12 }}
-                className="relative z-10 flex flex-col justify-between p-6 sm:p-7 rounded-2xl bg-brand-steel border border-brand-silver/15 hover:border-brand-red/50 transition-all duration-300 group shadow-xl hover:-translate-y-1.5"
+                className="relative z-10 flex flex-col justify-between p-6 sm:p-7 rounded-2xl bg-brand-surface/90 border border-white/[0.08] hover:border-brand-red/50 transition-all duration-300 group shadow-xl hover:-translate-y-1.5"
               >
                 {/* Top indicator bar on hover */}
                 <div className="absolute top-0 left-6 right-6 h-[2px] bg-brand-red opacity-0 group-hover:opacity-100 transition-opacity" />
@@ -54,32 +54,32 @@ export const PeriodizationRoadmap: React.FC = () => {
                 <div>
                   {/* Top Bar with Number code and badge */}
                   <div className="flex items-center justify-between mb-6">
-                    <span className="px-2.5 py-1 text-[10px] font-mono font-black tracking-wider uppercase rounded bg-brand-navy border border-brand-silver/15 text-brand-red">
+                    <span className="px-2.5 py-1 text-[10px] font-mono font-black tracking-wider uppercase rounded bg-brand-navy border border-white/[0.08] text-brand-red">
                       {stage.num}
                     </span>
-                    <span className="text-[10px] font-bold tracking-wider uppercase text-brand-gray">
+                    <span className="text-[10px] font-bold tracking-wider uppercase text-brand-gray font-mono">
                       {stage.tag}
                     </span>
                   </div>
 
                   {/* Icon */}
-                  <div className="w-12 h-12 rounded-xl bg-brand-navy border border-brand-silver/15 flex items-center justify-center text-brand-silver group-hover:text-brand-red group-hover:border-brand-red/40 transition-colors mb-5">
+                  <div className="w-12 h-12 rounded-xl bg-brand-navy border border-white/[0.08] flex items-center justify-center text-brand-silver group-hover:text-brand-red group-hover:border-brand-red/40 transition-colors mb-5 shadow-inner">
                     <Icon className="w-6 h-6" />
                   </div>
 
                   {/* Title */}
-                  <h3 className="text-base sm:text-lg font-black text-brand-white uppercase tracking-wide mb-3 leading-snug">
+                  <h3 className="text-base sm:text-lg font-black text-white uppercase tracking-wide mb-3 leading-snug">
                     {stage.name}
                   </h3>
 
                   {/* Description */}
-                  <p className="text-xs sm:text-sm text-brand-silver/80 font-medium leading-relaxed mb-6">
+                  <p className="text-xs sm:text-sm text-brand-silver/85 font-medium leading-relaxed mb-6">
                     {stage.desc}
                   </p>
                 </div>
 
                 {/* Bottom Diagonal Accent */}
-                <div className="pt-4 border-t border-brand-silver/10 flex items-center gap-1.5 opacity-30 group-hover:opacity-100 transition-opacity">
+                <div className="pt-4 border-t border-white/[0.08] flex items-center gap-1.5 opacity-30 group-hover:opacity-100 transition-opacity">
                   <span className="w-6 h-1 bg-brand-red skew-x-[-20deg]" />
                   <span className="w-3 h-1 bg-brand-red skew-x-[-20deg]" />
                 </div>

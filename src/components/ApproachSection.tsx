@@ -1,30 +1,30 @@
 import React from 'react';
 import { useLanguage } from '../context/LanguageContext';
 import { motion } from 'framer-motion';
-import { FileText, UserCheck2, Quote, CheckCircle2, Clock, Check } from 'lucide-react';
+import { FileText, UserCheck2, Clock } from 'lucide-react';
 
 export const ApproachSection: React.FC = () => {
-  const { t, isRtl } = useLanguage();
+  const { t } = useLanguage();
 
   return (
-    <section id="approach" className="py-20 sm:py-28 bg-brand-navy relative border-t border-brand-silver/10 overflow-hidden">
+    <section id="approach" className="py-24 sm:py-32 bg-brand-navy relative border-t border-white/[0.08] overflow-hidden">
       {/* Background ambient lighting */}
-      <div className="absolute top-1/3 right-0 w-96 h-96 bg-brand-red/5 rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute top-1/3 right-0 w-[500px] h-[500px] bg-brand-red/[0.04] rounded-full blur-[160px] pointer-events-none" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         
         {/* Section Header */}
-        <div className="text-center max-w-3xl mx-auto mb-14 sm:mb-20">
-          <div className="inline-flex items-center gap-2 px-3 py-1 bg-brand-steel border border-brand-silver/15 rounded-md text-xs font-black tracking-widest text-brand-red uppercase mb-4">
-            <span className="w-1.5 h-1.5 rounded-full bg-brand-red" />
+        <div className="text-center max-w-3xl mx-auto mb-16 sm:mb-20">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 bg-brand-surface border border-white/[0.08] rounded-full text-xs font-black tracking-widest text-brand-red uppercase mb-4 shadow-sm">
+            <span className="w-2 h-2 rounded-full bg-brand-red" />
             <span>{t.approach.badge}</span>
           </div>
 
-          <h2 className="text-2xl sm:text-4xl lg:text-5xl font-black text-brand-white uppercase tracking-tight mb-4">
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-white uppercase tracking-tight mb-4">
             {t.approach.title}
           </h2>
 
-          <p className="text-sm sm:text-base text-brand-silver/90 font-medium leading-relaxed max-w-2xl mx-auto">
+          <p className="text-base sm:text-lg text-brand-silver/90 font-medium leading-relaxed max-w-2xl mx-auto">
             {t.approach.subtitle}
           </p>
         </div>
@@ -40,26 +40,26 @@ export const ApproachSection: React.FC = () => {
             transition={{ duration: 0.6 }}
             className="lg:col-span-6 relative"
           >
-            <div className="relative rounded-3xl overflow-hidden border border-brand-silver/20 bg-brand-steel shadow-2xl">
+            <div className="relative rounded-3xl overflow-hidden border border-white/[0.12] bg-brand-surface shadow-2xl">
               <img
                 src="/assets/boukraa-program-building.jpg"
                 alt="Mohamed Amine Boukraa designing athlete training programme on computer screen with sports science books and BOUKRAA notebook"
-                className="w-full h-auto object-cover aspect-[16/9] filter contrast-[1.02]"
+                className="w-full h-auto object-cover aspect-[16/9] filter contrast-[1.03]"
                 loading="lazy"
               />
 
               {/* Bottom Overlay Label */}
-              <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-brand-navy via-brand-navy/85 to-transparent p-5 sm:p-6 pt-14 backdrop-blur-[2px]">
+              <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-brand-navy via-brand-navy/90 to-transparent p-6 pt-16 backdrop-blur-[3px]">
                 <div className="flex items-center justify-between">
                   <div>
-                    <div className="text-xs sm:text-sm font-black uppercase tracking-wider text-brand-white">
+                    <div className="text-xs sm:text-sm font-black uppercase tracking-wider text-white">
                       Programmation & Analyse Individualisée
                     </div>
-                    <div className="text-[11px] text-brand-silver/75 font-mono">
+                    <div className="text-[11px] text-brand-silver/80 font-mono">
                       Trap Bar · Fentes Bulgares · RPE & Vélocité
                     </div>
                   </div>
-                  <span className="text-[10px] sm:text-[11px] font-mono font-bold text-brand-red bg-brand-steel/90 px-2.5 py-1 rounded border border-brand-red/30">
+                  <span className="text-[10px] sm:text-[11px] font-mono font-bold text-brand-red bg-brand-surface/90 px-3 py-1 rounded-lg border border-brand-red/30">
                     SPORTS SCIENCE
                   </span>
                 </div>
@@ -67,7 +67,7 @@ export const ApproachSection: React.FC = () => {
             </div>
 
             {/* Subtle diagonal background cut */}
-            <div className="absolute -bottom-3 -left-3 rtl:-left-auto rtl:-right-3 w-28 h-2 bg-brand-red skew-x-[-25deg] opacity-80 pointer-events-none" />
+            <div className="absolute -bottom-3 -left-3 rtl:-left-auto rtl:-right-3 w-28 h-1 bg-brand-red skew-x-[-25deg] opacity-80 pointer-events-none" />
           </motion.div>
 
           {/* Pillars and Coach Quote */}
@@ -83,12 +83,12 @@ export const ApproachSection: React.FC = () => {
             <div className="grid grid-cols-1 gap-3.5">
               
               {/* SIMPLE */}
-              <div className="p-5 rounded-2xl bg-brand-steel/80 backdrop-blur-md border border-brand-silver/15 hover:border-brand-red/40 transition-all flex items-start gap-4 group">
-                <div className="w-11 h-11 rounded-xl bg-brand-navy border border-brand-silver/15 flex items-center justify-center text-brand-red flex-shrink-0 font-mono font-black text-sm group-hover:bg-brand-red group-hover:text-white transition-colors">
+              <div className="p-5 rounded-2xl bg-brand-surface/85 backdrop-blur-md border border-white/[0.08] hover:border-brand-red/40 transition-all flex items-start gap-4 group">
+                <div className="w-11 h-11 rounded-xl bg-brand-navy border border-white/[0.08] flex items-center justify-center text-brand-red flex-shrink-0 font-mono font-black text-sm group-hover:bg-brand-red group-hover:text-white transition-colors shadow-inner">
                   01
                 </div>
                 <div>
-                  <h4 className="text-sm sm:text-base font-black text-brand-white uppercase tracking-wider mb-1">
+                  <h4 className="text-sm sm:text-base font-black text-white uppercase tracking-wider mb-1">
                     {t.approach.pillars.simple.title}
                   </h4>
                   <p className="text-xs sm:text-sm text-brand-silver/85 leading-relaxed font-medium">
@@ -98,12 +98,12 @@ export const ApproachSection: React.FC = () => {
               </div>
 
               {/* EFFECTIVE */}
-              <div className="p-5 rounded-2xl bg-brand-steel/80 backdrop-blur-md border border-brand-silver/15 hover:border-brand-red/40 transition-all flex items-start gap-4 group">
-                <div className="w-11 h-11 rounded-xl bg-brand-navy border border-brand-silver/15 flex items-center justify-center text-brand-red flex-shrink-0 font-mono font-black text-sm group-hover:bg-brand-red group-hover:text-white transition-colors">
+              <div className="p-5 rounded-2xl bg-brand-surface/85 backdrop-blur-md border border-white/[0.08] hover:border-brand-red/40 transition-all flex items-start gap-4 group">
+                <div className="w-11 h-11 rounded-xl bg-brand-navy border border-white/[0.08] flex items-center justify-center text-brand-red flex-shrink-0 font-mono font-black text-sm group-hover:bg-brand-red group-hover:text-white transition-colors shadow-inner">
                   02
                 </div>
                 <div>
-                  <h4 className="text-sm sm:text-base font-black text-brand-white uppercase tracking-wider mb-1">
+                  <h4 className="text-sm sm:text-base font-black text-white uppercase tracking-wider mb-1">
                     {t.approach.pillars.effective.title}
                   </h4>
                   <p className="text-xs sm:text-sm text-brand-silver/85 leading-relaxed font-medium">
@@ -113,12 +113,12 @@ export const ApproachSection: React.FC = () => {
               </div>
 
               {/* PURPOSEFUL */}
-              <div className="p-5 rounded-2xl bg-brand-steel/80 backdrop-blur-md border border-brand-silver/15 hover:border-brand-red/40 transition-all flex items-start gap-4 group">
-                <div className="w-11 h-11 rounded-xl bg-brand-navy border border-brand-silver/15 flex items-center justify-center text-brand-red flex-shrink-0 font-mono font-black text-sm group-hover:bg-brand-red group-hover:text-white transition-colors">
+              <div className="p-5 rounded-2xl bg-brand-surface/85 backdrop-blur-md border border-white/[0.08] hover:border-brand-red/40 transition-all flex items-start gap-4 group">
+                <div className="w-11 h-11 rounded-xl bg-brand-navy border border-white/[0.08] flex items-center justify-center text-brand-red flex-shrink-0 font-mono font-black text-sm group-hover:bg-brand-red group-hover:text-white transition-colors shadow-inner">
                   03
                 </div>
                 <div>
-                  <h4 className="text-sm sm:text-base font-black text-brand-white uppercase tracking-wider mb-1">
+                  <h4 className="text-sm sm:text-base font-black text-white uppercase tracking-wider mb-1">
                     {t.approach.pillars.purposeful.title}
                   </h4>
                   <p className="text-xs sm:text-sm text-brand-silver/85 leading-relaxed font-medium">
@@ -130,8 +130,8 @@ export const ApproachSection: React.FC = () => {
             </div>
 
             {/* Coach Quote Box */}
-            <div className="p-6 rounded-2xl bg-brand-navy border-l-4 rtl:border-l-0 rtl:border-r-4 border-brand-red shadow-xl">
-              <blockquote className="text-xs sm:text-sm font-semibold italic text-brand-white leading-relaxed mb-3">
+            <div className="p-6 sm:p-7 rounded-2xl bg-brand-surface border-l-4 rtl:border-l-0 rtl:border-r-4 border-brand-red shadow-xl border-t border-r border-b border-white/[0.06]">
+              <blockquote className="text-xs sm:text-sm font-semibold italic text-white leading-relaxed mb-3">
                 {t.approach.quote}
               </blockquote>
               <div className="flex items-center justify-between text-[11px] sm:text-xs font-black uppercase tracking-wider text-brand-gray">
@@ -147,10 +147,10 @@ export const ApproachSection: React.FC = () => {
         </div>
 
         {/* Section 15 & 16: Program Options & Pricing Notice */}
-        <div className="pt-14 sm:pt-18 border-t border-brand-silver/10">
+        <div className="pt-16 sm:pt-20 border-t border-white/[0.08]">
           
-          <div className="text-center max-w-2xl mx-auto mb-10 sm:mb-14">
-            <h3 className="text-xl sm:text-3xl font-black text-brand-white uppercase tracking-tight mb-2">
+          <div className="text-center max-w-2xl mx-auto mb-12 sm:mb-16">
+            <h3 className="text-2xl sm:text-3xl font-black text-white uppercase tracking-tight mb-2">
               {t.approach.optionsTitle}
             </h3>
             <p className="text-xs sm:text-sm text-brand-silver/80 font-medium">
@@ -163,16 +163,16 @@ export const ApproachSection: React.FC = () => {
             {/* Option A: PROGRAM ONLY */}
             <motion.div
               whileHover={{ y: -4 }}
-              className="p-7 sm:p-9 rounded-3xl bg-brand-steel/80 backdrop-blur-xl border border-brand-silver/15 flex flex-col justify-between shadow-xl"
+              className="p-7 sm:p-9 rounded-3xl bg-brand-surface/90 backdrop-blur-xl border border-white/[0.08] flex flex-col justify-between shadow-2xl"
             >
               <div>
                 <div className="flex items-center justify-between mb-4">
-                  <span className="px-3 py-1 rounded-full bg-brand-navy border border-brand-silver/15 text-[11px] font-mono font-black text-brand-silver uppercase tracking-wider">
+                  <span className="px-3 py-1 rounded-full bg-brand-navy border border-white/[0.08] text-[11px] font-mono font-black text-brand-silver uppercase tracking-wider">
                     {t.approach.optionProgram.badge}
                   </span>
                   <FileText className="w-5 h-5 text-brand-red" />
                 </div>
-                <h4 className="text-lg sm:text-xl font-black text-brand-white uppercase tracking-wide mb-3">
+                <h4 className="text-lg sm:text-xl font-black text-white uppercase tracking-wide mb-3">
                   {t.approach.optionProgram.title}
                 </h4>
                 <p className="text-xs sm:text-sm text-brand-silver/85 leading-relaxed font-medium mb-6">
@@ -180,10 +180,10 @@ export const ApproachSection: React.FC = () => {
                 </p>
               </div>
 
-              <div className="space-y-3 pt-5 border-t border-brand-silver/10 text-xs">
+              <div className="space-y-3 pt-5 border-t border-white/[0.08] text-xs">
                 <div className="flex items-center justify-between">
                   <span className="text-brand-gray">Livrable :</span>
-                  <span className="font-mono text-brand-white font-bold">{t.approach.optionProgram.deliverable}</span>
+                  <span className="font-mono text-white font-bold">{t.approach.optionProgram.deliverable}</span>
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-brand-gray">Modalité :</span>
@@ -195,7 +195,7 @@ export const ApproachSection: React.FC = () => {
             {/* Option B: PROGRAM + COACHING */}
             <motion.div
               whileHover={{ y: -4 }}
-              className="p-7 sm:p-9 rounded-3xl bg-brand-steel/80 backdrop-blur-xl border border-brand-red/50 shadow-2xl shadow-brand-red/10 flex flex-col justify-between relative overflow-hidden"
+              className="p-7 sm:p-9 rounded-3xl bg-brand-surface/90 backdrop-blur-xl border border-brand-red/50 shadow-2xl shadow-brand-red/10 flex flex-col justify-between relative overflow-hidden"
             >
               {/* Subtle top indicator bar */}
               <div className="absolute top-0 left-0 right-0 h-1 bg-brand-red" />
@@ -207,7 +207,7 @@ export const ApproachSection: React.FC = () => {
                   </span>
                   <UserCheck2 className="w-5 h-5 text-brand-red" />
                 </div>
-                <h4 className="text-lg sm:text-xl font-black text-brand-white uppercase tracking-wide mb-3">
+                <h4 className="text-lg sm:text-xl font-black text-white uppercase tracking-wide mb-3">
                   {t.approach.optionCoaching.title}
                 </h4>
                 <p className="text-xs sm:text-sm text-brand-silver/85 leading-relaxed font-medium mb-6">
@@ -215,10 +215,10 @@ export const ApproachSection: React.FC = () => {
                 </p>
               </div>
 
-              <div className="space-y-3 pt-5 border-t border-brand-silver/10 text-xs">
+              <div className="space-y-3 pt-5 border-t border-white/[0.08] text-xs">
                 <div className="flex items-center justify-between">
                   <span className="text-brand-gray">Livrable & Suivi :</span>
-                  <span className="font-mono text-brand-white font-bold">{t.approach.optionCoaching.deliverable}</span>
+                  <span className="font-mono text-white font-bold">{t.approach.optionCoaching.deliverable}</span>
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-brand-gray">Délai de réponse ciblé :</span>
@@ -233,7 +233,7 @@ export const ApproachSection: React.FC = () => {
           </div>
 
           {/* Pricing Policy Statement (Section 16: No fixed public pricing) */}
-          <div className="mt-8 p-6 rounded-2xl bg-brand-navy border border-brand-silver/15 text-center max-w-2xl mx-auto shadow-lg">
+          <div className="mt-10 p-6 sm:p-8 rounded-2xl bg-brand-surface border border-white/[0.08] text-center max-w-2xl mx-auto shadow-2xl">
             <h5 className="text-[11px] sm:text-xs font-black uppercase tracking-widest text-brand-red mb-2 font-mono">
               {t.approach.pricingNote.title}
             </h5>

@@ -4,41 +4,51 @@
 
 @layer base {
   :root {
-    --brand-navy: #071827;
-    --brand-steel: #102A3B;
-    --brand-red: #F21D27;
-    --brand-silver: #D9E0E5;
-    --brand-white: #F5F7F8;
-    --brand-gray: #9BA9B3;
-    --brand-charcoal: #172027;
+    --brand-navy: #08090C;
+    --brand-steel: #111622;
+    --brand-surface: #0E121A;
+    --brand-elevated: #141A25;
+    --brand-red: #EE1B24;
+    --brand-silver: #E2E6EC;
+    --brand-white: #FFFFFF;
+    --brand-gray: #9CA3AF;
+    --brand-charcoal: #1A212F;
   }
 
   html {
-    background-color: #071827;
-    color: #F5F7F8;
-    font-family: 'Montserrat', 'Tajawal', sans-serif;
+    background-color: #08090C;
+    color: #FFFFFF;
+    font-family: 'Montserrat', 'Tajawal', -apple-system, sans-serif;
     scroll-behavior: smooth;
+    color-scheme: dark;
+    -webkit-tap-highlight-color: transparent;
   }
 
   html[dir="rtl"] {
     font-family: 'Tajawal', 'Montserrat', sans-serif;
   }
+
+  body {
+    background-color: #08090C;
+    color: #FFFFFF;
+    overflow-x: hidden;
+  }
 }
 
-/* Custom sleek scrollbar */
+/* Custom sleek high-contrast scrollbar */
 ::-webkit-scrollbar {
-  width: 7px;
-  height: 7px;
+  width: 6px;
+  height: 6px;
 }
 ::-webkit-scrollbar-track {
-  background: #071827;
+  background: #08090C;
 }
 ::-webkit-scrollbar-thumb {
-  background: #102A3B;
-  border-radius: 4px;
+  background: #1A212F;
+  border-radius: 9999px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #F21D27;
+  background: #EE1B24;
 }
 
 /* Diagonal logo-inspired accents */
@@ -52,29 +62,29 @@
   left: -12px;
   width: 4px;
   height: 100%;
-  background-color: #F21D27;
+  background-color: #EE1B24;
   transform: skewX(-18deg);
 }
 
 .diagonal-accent-bar {
   display: inline-block;
   width: 40px;
-  height: 4px;
-  background-color: #F21D27;
+  height: 3px;
+  background-color: #EE1B24;
   transform: skewX(-20deg);
 }
 
 /* Precision Tech Mesh Grid */
 .bg-tech-grid {
   background-image: 
-    linear-gradient(to right, rgba(217, 224, 229, 0.04) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(217, 224, 229, 0.04) 1px, transparent 1px);
-  background-size: 40px 40px;
+    linear-gradient(to right, rgba(255, 255, 255, 0.035) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.035) 1px, transparent 1px);
+  background-size: 48px 48px;
 }
 
 .mask-radial {
-  mask-image: radial-gradient(ellipse 70% 60% at 50% 10%, #000 60%, transparent 100%);
-  -webkit-mask-image: radial-gradient(ellipse 70% 60% at 50% 10%, #000 60%, transparent 100%);
+  mask-image: radial-gradient(ellipse 70% 60% at 50% 10%, #000 65%, transparent 100%);
+  -webkit-mask-image: radial-gradient(ellipse 70% 60% at 50% 10%, #000 65%, transparent 100%);
 }
 
 .mask-fade-edges {
@@ -84,19 +94,19 @@
 
 /* Glass & Card styles */
 .brand-card {
-  background: rgba(16, 42, 59, 0.7);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(217, 224, 229, 0.08);
+  background: rgba(17, 22, 34, 0.72);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
   transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 .brand-card:hover {
-  border-color: rgba(242, 29, 39, 0.45);
-  box-shadow: 0 12px 35px -10px rgba(0, 0, 0, 0.7), 0 0 25px -5px rgba(242, 29, 39, 0.2);
+  border-color: rgba(238, 27, 36, 0.45);
+  box-shadow: 0 16px 40px -10px rgba(0, 0, 0, 0.85), 0 0 30px -5px rgba(238, 27, 36, 0.22);
 }
 
 .glow-red {
-  box-shadow: 0 0 40px -10px rgba(242, 29, 39, 0.35);
+  box-shadow: 0 0 35px -8px rgba(238, 27, 36, 0.4);
 }
 
 /* Shimmer highlight on buttons/cards */
@@ -107,6 +117,12 @@
 
 .animate-shimmer {
   animation: shimmer 2.5s infinite;
+}
+
+/* Visible focus rings for accessibility */
+button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px #08090C, 0 0 0 4px #EE1B24;
 }
 
 /* RTL Helpers */

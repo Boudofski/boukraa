@@ -40,7 +40,7 @@ export const StatsBar: React.FC = () => {
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
         transition={{ duration: 0.6 }}
-        className="rounded-2xl bg-brand-steel/80 backdrop-blur-xl border border-brand-silver/15 p-6 sm:p-8 shadow-2xl grid grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8 divide-y sm:divide-y-0 lg:divide-x rtl:lg:divide-x-reverse divide-brand-silver/10"
+        className="rounded-2xl bg-brand-surface/90 backdrop-blur-2xl border border-white/[0.08] p-6 sm:p-8 shadow-2xl grid grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8 divide-y sm:divide-y-0 lg:divide-x rtl:lg:divide-x-reverse divide-white/[0.08]"
       >
         {stats.map((stat, i) => {
           const Icon = stat.icon;
@@ -51,11 +51,11 @@ export const StatsBar: React.FC = () => {
                 i > 0 ? 'pt-4 sm:pt-0 lg:px-6' : 'lg:pr-6 rtl:lg:pl-6'
               }`}
             >
-              <div className="flex items-center gap-2 mb-2">
-                <div className="w-8 h-8 rounded-lg bg-brand-navy border border-brand-silver/10 flex items-center justify-center text-brand-red">
+              <div className="flex items-center gap-2.5 mb-2.5">
+                <div className="w-9 h-9 rounded-xl bg-brand-navy border border-white/[0.08] flex items-center justify-center text-brand-red shadow-inner">
                   <Icon className="w-4 h-4" />
                 </div>
-                <span className="text-xl sm:text-2xl lg:text-3xl font-black font-mono tracking-tight text-brand-white">
+                <span className="text-xl sm:text-2xl lg:text-3xl font-black font-mono tracking-tight text-white">
                   {stat.num}
                 </span>
               </div>

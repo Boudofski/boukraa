@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Header } from './components/Header';
 import { Hero } from './components/Hero';
 import { StatsBar } from './components/StatsBar';
@@ -17,11 +17,23 @@ import { Footer } from './components/Footer';
 import { AssessmentModal } from './components/AssessmentModal';
 import { AdminPortal } from './components/AdminPortal';
 import { ServiceId } from './types';
+import { useLanguage } from './context/LanguageContext';
+import { ArrowRight } from 'lucide-react';
 
 export const App: React.FC = () => {
+  const { t, isRtl } = useLanguage();
   const [isAssessmentOpen, setIsAssessmentOpen] = useState(false);
   const [selectedServiceId, setSelectedServiceId] = useState<ServiceId>('strength_conditioning');
   const [isAdminOpen, setIsAdminOpen] = useState(false);
+  const [showMobileSticky, setShowMobileSticky] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setShowMobileSticky(window.scrollY > 450);
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   const handleStartAssessment = (serviceId?: ServiceId) => {
     if (serviceId) {
@@ -31,7 +43,7 @@ export const App: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-brand-navy text-brand-white flex flex-col relative selection:bg-brand-red selection:text-white">
+    <div className="min-h-screen bg-brand-navy text-white flex flex-col relative selection:bg-brand-red selection:text-white">
       {/* 1. Header with Language Switcher & Sticky Blur */}
       <Header
         onStartAssessment={() => handleStartAssessment('strength_conditioning')}
@@ -81,6 +93,27 @@ export const App: React.FC = () => {
 
       {/* 15. Footer */}
       <Footer onOpenAdmin={() => setIsAdminOpen(true)} />
+
+      {/* Floating Mobile Quick Assessment Pill */}
+      {showMobileSticky && !isAssessmentOpen && !isAdminOpen && (
+        <div className="sm:hidden fixed bottom-4 inset-x-4 z-30 animate-in slide-in-from-bottom-6 duration-300">
+          <div className="p-2.5 rounded-2xl bg-brand-surface/95 backdrop-blur-2xl border border-white/[0.12] shadow-2xl flex items-center justify-between gap-3">
+            <div className="flex items-center gap-2.5 pl-2 rtl:pl-0 rtl:pr-2">
+              <span className="w-2.5 h-2.5 rounded-full bg-brand-red animate-pulse flex-shrink-0" />
+              <div className="text-[11px] font-mono font-bold text-white uppercase tracking-wider leading-tight">
+                BOUKRAA <span className="text-brand-gray">· COACHING</span>
+              </div>
+            </div>
+            <button
+              onClick={() => handleStartAssessment('strength_conditioning')}
+              className="px-4 py-2.5 bg-brand-red hover:bg-brand-redHover text-white font-black text-xs uppercase tracking-wider rounded-xl shadow-lg shadow-brand-red/35 flex items-center gap-1.5 flex-shrink-0"
+            >
+              <span>{t.nav.startAssessment}</span>
+              <ArrowRight className={`w-3.5 h-3.5 ${isRtl ? 'rotate-180' : ''}`} />
+            </button>
+          </div>
+        </div>
+      )}
 
       {/* Direct Interactive Assessment Flow Modal (Single-question mobile-first) */}
       <AssessmentModal
