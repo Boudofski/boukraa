@@ -21,12 +21,16 @@ export interface Question {
   id: string;
   title: Record<Locale, string>;
   subtitle?: Record<Locale, string>;
-  type: 'text' | 'number' | 'radio' | 'textarea' | 'tel';
+  /** 'contact' accepts either an email address or a phone/WhatsApp number */
+  type: 'text' | 'number' | 'radio' | 'textarea' | 'tel' | 'contact';
   options?: QuestionOption[];
   placeholder?: Record<Locale, string>;
   required?: boolean;
   condition?: (answers: Record<string, any>) => boolean;
   disclaimer?: Record<Locale, string>;
+  /** Selecting one of these values stops the form (e.g. no medical clearance) */
+  blockingValues?: string[];
+  blockingMessage?: Record<Locale, string>;
 }
 
 export interface ServiceDefinition {

@@ -1,34 +1,34 @@
 import React, { useState, useEffect } from 'react';
 import { Header } from './components/Header';
-import { Hero } from './components/Hero';
-import { StatsBar } from './components/StatsBar';
-import { ServicesSection } from './components/ServicesSection';
+import { HeroSection } from './components/HeroSection';
 import { HowItWorks } from './components/HowItWorks';
-import { ApproachSection } from './components/ApproachSection';
 import { AboutSection } from './components/AboutSection';
-import { FAQSection } from './components/FAQSection';
-import { FinalCTA } from './components/FinalCTA';
 import { Footer } from './components/Footer';
 import { AssessmentModal } from './components/AssessmentModal';
 import { AdminPortal } from './components/AdminPortal';
 import { ServiceId } from './types';
-import { useLanguage } from './context/LanguageContext';
-import { ArrowRight } from 'lucide-react';
 
 export const App: React.FC = () => {
-  const { t, isRtl } = useLanguage();
   const [isAssessmentOpen, setIsAssessmentOpen] = useState(false);
   const [selectedServiceId, setSelectedServiceId] = useState<ServiceId>('strength_conditioning');
   const [isAdminOpen, setIsAdminOpen] = useState(false);
-  const [showMobileSticky, setShowMobileSticky] = useState(false);
 
+  // Coach portal shortcut: open boukraa.vercel.app/#admin
   useEffect(() => {
-    const handleScroll = () => {
-      setShowMobileSticky(window.scrollY > 450);
+    const check = () => {
+      if (window.location.hash === '#admin') setIsAdminOpen(true);
     };
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    check();
+    window.addEventListener('hashchange', check);
+    return () => window.removeEventListener('hashchange', check);
   }, []);
+
+  const closeAdmin = () => {
+    setIsAdminOpen(false);
+    if (window.location.hash === '#admin') {
+      history.replaceState(null, '', window.location.pathname + window.location.search);
+    }
+  };
 
   const handleStartAssessment = (serviceId?: ServiceId) => {
     if (serviceId) {
@@ -38,74 +38,26 @@ export const App: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-brand-navy text-white flex flex-col relative selection:bg-brand-red selection:text-white">
-      {/* 1. Header with Language Switcher & Sticky Blur */}
-      <Header
-        onStartAssessment={() => handleStartAssessment('strength_conditioning')}
-        onOpenAdmin={() => setIsAdminOpen(true)}
-      />
+    <div className="min-h-screen bg-brand-bg text-brand-navy flex flex-col selection:bg-brand-red selection:text-white">
+      <Header onOpenAdmin={() => setIsAdminOpen(true)} />
 
       <main className="flex-1">
-        {/* 2. Hero Section with Live Cohort Badge, Photo 1 (Track Portrait) & Quick Selectors */}
-        <Hero onStartAssessment={(id) => handleStartAssessment(id || 'strength_conditioning')} />
-
-        {/* 3. Stats & Credibility Bar */}
-        <StatsBar />
-
-        {/* 4. Choose What You Need / 3 Core Services */}
-        <ServicesSection onSelectService={(id) => handleStartAssessment(id)} />
-
-        {/* 5. How It Works (3 Steps) */}
+        <HeroSection onSelectService={(id) => handleStartAssessment(id)} />
         <HowItWorks />
-
-        {/* 6. BOUKRAA Approach (Photo 2: Program Building on PC, 3 Pillars, Quote, 2 Pathways & Pricing Policy) */}
-        <ApproachSection />
-
-        {/* 7. About Coach Mohamed Amine Boukraa & Authentic Field + Tactics Gallery */}
         <AboutSection />
-
-        {/* 8. Frequently Asked Questions (Animated Accordion) */}
-        <FAQSection />
-
-        {/* 9. Final Conversion CTA */}
-        <FinalCTA onSelectService={(id) => handleStartAssessment(id)} />
       </main>
 
-      {/* 10. Footer */}
       <Footer onOpenAdmin={() => setIsAdminOpen(true)} />
 
-      {/* Floating Mobile Quick Assessment Pill */}
-      {showMobileSticky && !isAssessmentOpen && !isAdminOpen && (
-        <div className="sm:hidden fixed bottom-4 inset-x-4 z-30 animate-in slide-in-from-bottom-6 duration-300">
-          <div className="p-2.5 rounded-2xl bg-brand-surface/95 backdrop-blur-2xl border border-white/[0.12] shadow-2xl flex items-center justify-between gap-3">
-            <div className="flex items-center gap-2.5 pl-2 rtl:pl-0 rtl:pr-2">
-              <span className="w-2.5 h-2.5 rounded-full bg-brand-red animate-pulse flex-shrink-0" />
-              <div className="text-[11px] font-mono font-bold text-white uppercase tracking-wider leading-tight">
-                BOUKRAA <span className="text-brand-gray">· COACHING</span>
-              </div>
-            </div>
-            <button
-              onClick={() => handleStartAssessment('strength_conditioning')}
-              className="px-4 py-2.5 bg-brand-red hover:bg-brand-redHover text-white font-black text-xs uppercase tracking-wider rounded-xl shadow-lg shadow-brand-red/35 flex items-center gap-1.5 flex-shrink-0"
-            >
-              <span>{t.nav.startAssessment}</span>
-              <ArrowRight className={`w-3.5 h-3.5 ${isRtl ? 'rotate-180' : ''}`} />
-            </button>
-          </div>
-        </div>
-      )}
-
-      {/* Direct Interactive Assessment Flow Modal (Single-question mobile-first) */}
       <AssessmentModal
         isOpen={isAssessmentOpen}
         initialServiceId={selectedServiceId}
         onClose={() => setIsAssessmentOpen(false)}
       />
 
-      {/* Built-in Coach Submissions Review Portal */}
       <AdminPortal
         isOpen={isAdminOpen}
-        onClose={() => setIsAdminOpen(false)}
+        onClose={closeAdmin}
       />
     </div>
   );

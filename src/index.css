@@ -4,23 +4,19 @@
 
 @layer base {
   :root {
-    --brand-navy: #08090C;
-    --brand-steel: #111622;
-    --brand-surface: #0E121A;
-    --brand-elevated: #141A25;
-    --brand-red: #EE1B24;
-    --brand-silver: #E2E6EC;
+    --brand-bg: #F5F5F2;
+    --brand-navy: #14283B;
+    --brand-red: #EF252D;
+    --brand-gray: #777F87;
     --brand-white: #FFFFFF;
-    --brand-gray: #9CA3AF;
-    --brand-charcoal: #1A212F;
+    --brand-border: #E5E5E0;
   }
 
   html {
-    background-color: #08090C;
-    color: #FFFFFF;
+    background-color: #F5F5F2;
+    color: #14283B;
     font-family: 'Montserrat', 'Tajawal', -apple-system, sans-serif;
     scroll-behavior: smooth;
-    color-scheme: dark;
     -webkit-tap-highlight-color: transparent;
   }
 
@@ -29,100 +25,32 @@
   }
 
   body {
-    background-color: #08090C;
-    color: #FFFFFF;
+    background-color: #F5F5F2;
+    color: #14283B;
     overflow-x: hidden;
   }
 }
 
-/* Custom sleek high-contrast scrollbar */
+/* Minimal scrollbar */
 ::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+  width: 5px;
+  height: 5px;
 }
 ::-webkit-scrollbar-track {
-  background: #08090C;
+  background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: #1A212F;
+  background: #D4D4CF;
   border-radius: 9999px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #EE1B24;
+  background: #EF252D;
 }
 
-/* Diagonal logo-inspired accents */
-.diagonal-slash {
-  position: relative;
-}
-.diagonal-slash::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -12px;
-  width: 4px;
-  height: 100%;
-  background-color: #EE1B24;
-  transform: skewX(-18deg);
-}
-
-.diagonal-accent-bar {
-  display: inline-block;
-  width: 40px;
-  height: 3px;
-  background-color: #EE1B24;
-  transform: skewX(-20deg);
-}
-
-/* Precision Tech Mesh Grid */
-.bg-tech-grid {
-  background-image: 
-    linear-gradient(to right, rgba(255, 255, 255, 0.035) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(255, 255, 255, 0.035) 1px, transparent 1px);
-  background-size: 48px 48px;
-}
-
-.mask-radial {
-  mask-image: radial-gradient(ellipse 70% 60% at 50% 10%, #000 65%, transparent 100%);
-  -webkit-mask-image: radial-gradient(ellipse 70% 60% at 50% 10%, #000 65%, transparent 100%);
-}
-
-.mask-fade-edges {
-  mask-image: linear-gradient(to bottom, transparent 0%, black 15%, black 85%, transparent 100%);
-  -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 15%, black 85%, transparent 100%);
-}
-
-/* Glass & Card styles */
-.brand-card {
-  background: rgba(17, 22, 34, 0.72);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-}
-.brand-card:hover {
-  border-color: rgba(238, 27, 36, 0.45);
-  box-shadow: 0 16px 40px -10px rgba(0, 0, 0, 0.85), 0 0 30px -5px rgba(238, 27, 36, 0.22);
-}
-
-.glow-red {
-  box-shadow: 0 0 35px -8px rgba(238, 27, 36, 0.4);
-}
-
-/* Shimmer highlight on buttons/cards */
-@keyframes shimmer {
-  0% { transform: translateX(-100%); }
-  100% { transform: translateX(200%); }
-}
-
-.animate-shimmer {
-  animation: shimmer 2.5s infinite;
-}
-
-/* Visible focus rings for accessibility */
+/* Focus rings */
 button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visible {
   outline: none;
-  box-shadow: 0 0 0 2px #08090C, 0 0 0 4px #EE1B24;
+  box-shadow: 0 0 0 2px #F5F5F2, 0 0 0 4px #EF252D;
 }
 
 /* RTL Helpers */

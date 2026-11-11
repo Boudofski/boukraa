@@ -37,7 +37,6 @@ export const AssessmentModal: React.FC<AssessmentModalProps> = ({
 
   const inputRef = useRef<HTMLInputElement | HTMLTextAreaElement | null>(null);
 
-  // Synchronize initialServiceId when modal opens
   useEffect(() => {
     setSelectedServiceId(initialServiceId);
     setCurrentIndex(0);
@@ -47,7 +46,6 @@ export const AssessmentModal: React.FC<AssessmentModalProps> = ({
     setIsReviewStep(false);
   }, [initialServiceId, isOpen]);
 
-  // Lock body scroll when open
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = 'hidden';
@@ -63,7 +61,6 @@ export const AssessmentModal: React.FC<AssessmentModalProps> = ({
     return servicesData.find((s) => s.id === selectedServiceId) || servicesData[0];
   }, [selectedServiceId]);
 
-  // Compute active questions based on condition functions
   const activeQuestions: Question[] = useMemo(() => {
     return currentService.questions.filter((q) => {
       if (!q.condition) return true;
@@ -73,7 +70,6 @@ export const AssessmentModal: React.FC<AssessmentModalProps> = ({
 
   const currentQuestion = activeQuestions[currentIndex];
 
-  // Auto-focus input on step change
   useEffect(() => {
     if (isOpen && !isReviewStep && !submittedData) {
       const timer = setTimeout(() => {
@@ -105,6 +101,21 @@ export const AssessmentModal: React.FC<AssessmentModalProps> = ({
         setErrorMessage(t.questionnaire.requiredError);
         return false;
       }
+      if (currentQuestion.type === 'contact') {
+        const str = String(val).trim();
+        const isEmail = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(str);
+        const digits = str.replace(/[^0-9]/g, '');
+        if (!isEmail && digits.length < 8) {
+          setErrorMessage(
+            locale === 'fr'
+              ? 'Veuillez saisir un email valide ou un numéro WhatsApp (au moins 8 chiffres).'
+              : locale === 'ar'
+              ? 'يرجى إدخال بريد إلكتروني صالح أو رقم واتساب (8 أرقام على الأقل).'
+              : 'Please enter a valid email or WhatsApp number (at least 8 digits).'
+          );
+          return false;
+        }
+      }
       if (currentQuestion.type === 'tel') {
         const cleaned = String(val).replace(/[^0-9+]/g, '');
         if (cleaned.length < 8) {
@@ -135,7 +146,14 @@ export const AssessmentModal: React.FC<AssessmentModalProps> = ({
     return true;
   };
 
+  const isBlocked = !!(
+    currentQuestion?.blockingValues &&
+    currentAnswer !== undefined &&
+    currentQuestion.blockingValues.includes(currentAnswer)
+  );
+
   const handleNext = () => {
+    if (isBlocked) return;
     if (!validateCurrentQuestion()) return;
 
     if (currentIndex < activeQuestions.length - 1) {
@@ -184,17 +202,16 @@ export const AssessmentModal: React.FC<AssessmentModalProps> = ({
       const data = await res.json();
 
       if (!res.ok) {
-        throw new Error(data.error || 'Erreur lors de l’envoi');
+        throw new Error(data.error || 'Error submitting');
       }
 
       setSubmittedData({ id: data.id });
 
-      // Trigger celebratory confetti
       confetti({
         particleCount: 65,
         spread: 70,
         origin: { y: 0.6 },
-        colors: ['#EE1B24', '#FFFFFF', '#141A25'],
+        colors: ['#EF252D', '#14283B', '#F5F5F2'],
       });
     } catch (err: any) {
       setErrorMessage(
@@ -217,12 +234,10 @@ export const AssessmentModal: React.FC<AssessmentModalProps> = ({
     }
   };
 
-  // Progress percentage
   const progressPercent = isReviewStep
     ? 100
     : Math.round(((currentIndex + 1) / (activeQuestions.length + 1)) * 100);
 
-  // WhatsApp shortcut
   const getCoachWhatsAppUrl = () => {
     const refCode = submittedData?.id || '';
     const name = answers.fullName || '';
@@ -234,13 +249,13 @@ export const AssessmentModal: React.FC<AssessmentModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 overflow-y-auto bg-black/90 backdrop-blur-xl flex flex-col sm:items-center sm:justify-center sm:p-4 animate-in fade-in duration-200">
+    <div className="fixed inset-0 z-50 overflow-y-auto bg-black/40 backdrop-blur-sm flex flex-col sm:items-center sm:justify-center sm:p-4">
       
-      {/* Container: Fullscreen on mobile, Elegant card on desktop */}
-      <div className="relative w-full sm:max-w-2xl bg-brand-surface min-h-screen sm:min-h-0 sm:max-h-[90vh] sm:rounded-3xl border-0 sm:border sm:border-white/[0.12] shadow-2xl flex flex-col justify-between overflow-hidden">
+      {/* Container */}
+      <div className="relative w-full sm:max-w-xl bg-white min-h-screen sm:min-h-0 sm:max-h-[90vh] sm:rounded-2xl border-0 sm:border sm:border-brand-border shadow-modal flex flex-col justify-between overflow-hidden">
         
-        {/* Top Thin Red Progress Bar */}
-        <div className="w-full bg-brand-navy h-1.5 relative overflow-hidden">
+        {/* Progress Bar */}
+        <div className="w-full bg-brand-bg h-1 relative overflow-hidden">
           <div
             className="h-full bg-brand-red transition-all duration-300 ease-out"
             style={{ width: `${submittedData ? 100 : progressPercent}%` }}
@@ -248,72 +263,66 @@ export const AssessmentModal: React.FC<AssessmentModalProps> = ({
         </div>
 
         {/* Modal Header */}
-        <div className="px-5 sm:px-6 py-4 border-b border-white/[0.08] flex items-center justify-between bg-brand-surface/90">
+        <div className="px-5 sm:px-6 py-3.5 border-b border-brand-border flex items-center justify-between bg-white">
           <div className="flex items-center gap-2.5">
-            <span className="w-2.5 h-2.5 rounded-full bg-brand-red flex-shrink-0" />
-            <span className="text-xs font-black uppercase tracking-wider text-white truncate max-w-[240px] sm:max-w-md">
+            <span className="w-2 h-2 rounded-full bg-brand-red flex-shrink-0" />
+            <span className="text-[11px] font-extrabold uppercase tracking-wider text-brand-navy truncate max-w-[240px] sm:max-w-md">
               {currentService.title[locale]}
             </span>
           </div>
 
           <button
             onClick={onClose}
-            className="p-2 -mr-1 rtl:-mr-0 rtl:-ml-1 rounded-xl text-brand-gray hover:text-white hover:bg-white/5 transition-colors focus:outline-none"
+            className="p-2 -mr-1 rtl:-mr-0 rtl:-ml-1 rounded-lg text-brand-gray hover:text-brand-navy hover:bg-brand-bg transition-colors focus:outline-none"
             aria-label={t.questionnaire.close}
           >
             <X className="w-5 h-5" />
           </button>
         </div>
 
-        {/* Modal Scrollable Body */}
+        {/* Modal Body */}
         <div className="p-5 sm:p-8 overflow-y-auto flex-1 flex flex-col justify-center">
           
-          {/* Post-Submission Screen */}
+          {/* Post-Submission */}
           {submittedData ? (
-            <div className="text-center py-4 space-y-6 animate-in zoom-in-95 duration-300 my-auto">
-              <div className="w-16 h-16 rounded-full bg-brand-red/10 border border-brand-red/40 flex items-center justify-center mx-auto text-brand-red shadow-lg shadow-brand-red/20">
-                <Check className="w-8 h-8 stroke-[3]" />
+            <div className="text-center py-4 space-y-5 my-auto">
+              <div className="w-14 h-14 rounded-full bg-green-50 border-2 border-green-200 flex items-center justify-center mx-auto text-green-600">
+                <Check className="w-7 h-7 stroke-[3]" />
               </div>
 
               <div>
-                <span className="inline-block px-3 py-1 bg-brand-red/20 border border-brand-red/40 rounded-full text-xs font-bold text-brand-red uppercase tracking-wider mb-2.5">
+                <span className="inline-block px-3 py-1 bg-green-50 border border-green-200 rounded-full text-[11px] font-bold text-green-700 uppercase tracking-wider mb-2">
                   {t.postSubmission.statusBadge}
                 </span>
-                <h3 className="text-2xl sm:text-3xl font-black text-white uppercase tracking-tight mb-2">
+                <h3 className="text-xl sm:text-2xl font-black text-brand-navy uppercase tracking-tight mb-2">
                   {t.postSubmission.title}
                 </h3>
-                <p className="text-xs sm:text-sm text-brand-silver/90">
+                <p className="text-xs sm:text-sm text-brand-gray">
                   {t.postSubmission.referenceLabel}{' '}
-                  <span className="font-mono font-black text-white bg-brand-navy px-3 py-1 rounded-lg border border-white/[0.1] ml-1">
+                  <span className="font-mono font-black text-brand-navy bg-brand-bg px-2.5 py-0.5 rounded-md border border-brand-border ml-1">
                     {submittedData.id}
                   </span>
                 </p>
               </div>
 
-              {/* Genuine Capacity / Scarcity Box */}
-              <div className="p-5 sm:p-6 rounded-2xl bg-brand-navy border border-white/[0.08] text-left rtl:text-right space-y-3 shadow-inner">
-                <div className="flex items-center gap-2 text-white font-black text-xs sm:text-sm uppercase tracking-wider">
-                  <Clock className="w-4 h-4 text-brand-red flex-shrink-0" />
+              <div className="p-4 sm:p-5 rounded-xl bg-brand-bg border border-brand-border text-left rtl:text-right space-y-2.5">
+                <div className="flex items-center gap-2 text-brand-navy font-extrabold text-xs uppercase tracking-wider">
+                  <Clock className="w-3.5 h-3.5 text-brand-red flex-shrink-0" />
                   <span>{t.postSubmission.scarcityHeading}</span>
                 </div>
-                <p className="text-xs sm:text-sm text-brand-silver/90 leading-relaxed font-medium">
-                  {t.postSubmission.p1}
-                </p>
-                <p className="text-xs sm:text-sm text-brand-silver/90 leading-relaxed font-medium">
-                  {t.postSubmission.p2}
-                </p>
-                <p className="text-xs text-brand-gray leading-relaxed pt-2 border-t border-white/[0.06]">
+                <p className="text-xs text-brand-navy/70 leading-relaxed">{t.postSubmission.p1}</p>
+                <p className="text-xs text-brand-navy/70 leading-relaxed">{t.postSubmission.p2}</p>
+                <p className="text-[11px] text-brand-gray leading-relaxed pt-2 border-t border-brand-border">
                   {t.postSubmission.p3}
                 </p>
               </div>
 
-              {/* Direct WhatsApp Action */}
-              <div className="pt-2 flex flex-col sm:flex-row gap-3 justify-center">
+              <div className="pt-1 flex flex-col sm:flex-row gap-3 justify-center">
                 <a
                   href={getCoachWhatsAppUrl()}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3.5 bg-emerald-600 hover:bg-emerald-500 text-white font-black text-sm tracking-wider uppercase rounded-xl shadow-lg shadow-emerald-600/30 transition-all"
+                  className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs tracking-wider uppercase rounded-lg transition-colors"
                 >
                   <MessageSquare className="w-4 h-4" />
                   <span>{t.postSubmission.whatsAppAction}</span>
@@ -321,33 +330,33 @@ export const AssessmentModal: React.FC<AssessmentModalProps> = ({
 
                 <button
                   onClick={onClose}
-                  className="w-full sm:w-auto px-6 py-3.5 bg-brand-navy hover:bg-white/5 text-brand-silver font-bold text-sm tracking-wider uppercase rounded-xl border border-white/[0.1] transition-all"
+                  className="w-full sm:w-auto px-5 py-3 bg-brand-bg hover:bg-brand-border text-brand-navy font-bold text-xs tracking-wider uppercase rounded-lg border border-brand-border transition-colors"
                 >
                   {t.postSubmission.closeBtn}
                 </button>
               </div>
             </div>
           ) : isReviewStep ? (
-            /* Review Step before final submission */
+            /* Review Step */
             <div className="space-y-5 my-auto">
               <div>
-                <span className="text-xs font-bold text-brand-red uppercase tracking-wider font-mono">
+                <span className="text-[11px] font-bold text-brand-red uppercase tracking-wider">
                   {locale === 'fr' ? 'Dernière étape' : locale === 'ar' ? 'الخطوة الأخيرة' : 'Final Step'}
                 </span>
-                <h3 className="text-xl sm:text-2xl font-black text-white uppercase tracking-tight mt-1">
+                <h3 className="text-lg sm:text-xl font-black text-brand-navy uppercase tracking-tight mt-1">
                   {t.questionnaire.reviewTitle}
                 </h3>
-                <p className="text-xs sm:text-sm text-brand-silver/80 mt-1">
+                <p className="text-xs text-brand-gray mt-1">
                   {t.questionnaire.reviewSubtitle}
                 </p>
               </div>
 
-              <div className="bg-brand-navy p-5 rounded-2xl border border-white/[0.08] space-y-3 max-h-[46vh] overflow-y-auto shadow-inner">
-                <div className="flex justify-between items-center pb-2.5 border-b border-white/[0.08]">
-                  <span className="text-xs text-brand-gray uppercase font-semibold">
+              <div className="bg-brand-bg p-4 rounded-xl border border-brand-border space-y-2.5 max-h-[46vh] overflow-y-auto">
+                <div className="flex justify-between items-center pb-2.5 border-b border-brand-border">
+                  <span className="text-[11px] text-brand-gray uppercase font-semibold">
                     {t.questionnaire.serviceType}
                   </span>
-                  <span className="text-xs font-black text-brand-red uppercase">
+                  <span className="text-[11px] font-extrabold text-brand-red uppercase">
                     {currentService.title[locale]}
                   </span>
                 </div>
@@ -362,18 +371,18 @@ export const AssessmentModal: React.FC<AssessmentModalProps> = ({
                   if (val === undefined || val === '') return null;
 
                   return (
-                    <div key={q.id} className="flex items-start justify-between gap-3 text-xs sm:text-sm pb-2.5 border-b border-white/[0.06]">
+                    <div key={q.id} className="flex items-start justify-between gap-3 text-xs pb-2.5 border-b border-brand-border/60">
                       <div className="flex-1">
                         <div className="text-brand-gray text-[11px] font-medium">
                           {q.title[locale]}
                         </div>
-                        <div className="text-white font-bold break-words mt-0.5">
+                        <div className="text-brand-navy font-bold break-words mt-0.5">
                           {String(displayVal)}
                         </div>
                       </div>
                       <button
                         onClick={() => handleEditQuestion(idx)}
-                        className="p-1.5 text-brand-gray hover:text-brand-red transition-colors rounded-lg hover:bg-white/5"
+                        className="p-1.5 text-brand-gray hover:text-brand-red transition-colors rounded-md hover:bg-brand-border/50"
                         title={t.questionnaire.edit}
                       >
                         <Edit3 className="w-3.5 h-3.5" />
@@ -384,25 +393,25 @@ export const AssessmentModal: React.FC<AssessmentModalProps> = ({
               </div>
 
               {errorMessage && (
-                <div className="p-3 bg-red-950/70 border border-brand-red/50 rounded-xl text-xs text-red-200 flex items-center gap-2">
-                  <AlertCircle className="w-4 h-4 text-brand-red flex-shrink-0" />
+                <div className="p-3 bg-red-50 border border-red-200 rounded-lg text-xs text-red-700 flex items-center gap-2">
+                  <AlertCircle className="w-4 h-4 text-red-500 flex-shrink-0" />
                   <span>{errorMessage}</span>
                 </div>
               )}
             </div>
           ) : (
-            /* One Question at a Time Screen */
+            /* One Question at a Time */
             <AnimatePresence mode="wait">
               <motion.div
                 key={currentQuestion?.id || currentIndex}
-                initial={{ opacity: 0, x: isRtl ? -15 : 15 }}
+                initial={{ opacity: 0, x: isRtl ? -12 : 12 }}
                 animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: isRtl ? 15 : -15 }}
-                transition={{ duration: 0.22, ease: 'easeOut' }}
-                className="space-y-6 my-auto"
+                exit={{ opacity: 0, x: isRtl ? 12 : -12 }}
+                transition={{ duration: 0.2, ease: 'easeOut' }}
+                className="space-y-5 my-auto"
               >
-                {/* Progress Count (03 / 10) */}
-                <div className="flex items-center justify-between text-xs font-mono font-bold text-brand-gray uppercase tracking-wider">
+                {/* Progress Count */}
+                <div className="flex items-center justify-between text-[11px] font-bold text-brand-gray uppercase tracking-wider">
                   <span>
                     {t.questionnaire.stepIndicator}{' '}
                     <span className="text-brand-red">
@@ -410,58 +419,65 @@ export const AssessmentModal: React.FC<AssessmentModalProps> = ({
                     </span>{' '}
                     / {String(activeQuestions.length).padStart(2, '0')}
                   </span>
-                  <span className="text-brand-silver/60 font-semibold">
+                  <span className="text-brand-muted">
                     {progressPercent}%
                   </span>
                 </div>
 
-                {/* Question Title & Subtitle */}
+                {/* Question */}
                 <div>
-                  <h3 className="text-xl sm:text-2xl font-black text-white leading-snug tracking-tight">
+                  <h3 className="text-lg sm:text-xl font-black text-brand-navy leading-snug tracking-tight">
                     {currentQuestion?.title[locale]}
                   </h3>
                   {currentQuestion?.subtitle && (
-                    <p className="text-xs sm:text-sm text-brand-silver/80 mt-2 font-medium">
+                    <p className="text-xs text-brand-gray mt-2 font-medium">
                       {currentQuestion.subtitle[locale]}
                     </p>
                   )}
                 </div>
 
-                {/* Question Input Renderers */}
+                {/* Input */}
                 <div className="py-1" onKeyDown={handleKeyDown}>
-                  {/* Text / Tel / Number Input */}
                   {(currentQuestion?.type === 'text' ||
                     currentQuestion?.type === 'tel' ||
+                    currentQuestion?.type === 'contact' ||
                     currentQuestion?.type === 'number') && (
-                    <div>
-                      <input
-                        ref={inputRef as any}
-                        type={currentQuestion.type === 'number' ? 'number' : 'text'}
-                        value={currentAnswer || ''}
-                        onChange={(e) => handleAnswerChange(e.target.value)}
-                        placeholder={currentQuestion.placeholder?.[locale] || ''}
-                        className="w-full px-4 py-4 bg-brand-navy border border-white/[0.12] focus:border-brand-red rounded-xl text-white text-base font-semibold placeholder:text-brand-gray/50 focus:outline-none focus:ring-1 focus:ring-brand-red transition-all"
-                      />
-                    </div>
+                    <input
+                      ref={inputRef as any}
+                      type={currentQuestion.type === 'number' ? 'number' : 'text'}
+                      inputMode={
+                        currentQuestion.type === 'number'
+                          ? 'numeric'
+                          : currentQuestion.type === 'contact'
+                          ? 'email'
+                          : currentQuestion.type === 'tel'
+                          ? 'tel'
+                          : 'text'
+                      }
+                      autoComplete={
+                        currentQuestion.id === 'fullName' ? 'name' : currentQuestion.type === 'contact' ? 'email' : 'off'
+                      }
+                      dir={currentQuestion.type === 'contact' ? 'ltr' : undefined}
+                      value={currentAnswer || ''}
+                      onChange={(e) => handleAnswerChange(e.target.value)}
+                      placeholder={currentQuestion.placeholder?.[locale] || ''}
+                      className="w-full px-4 py-3.5 bg-brand-bg border border-brand-border focus:border-brand-red rounded-xl text-brand-navy text-sm font-semibold placeholder:text-brand-muted focus:outline-none focus:ring-1 focus:ring-brand-red transition-all"
+                    />
                   )}
 
-                  {/* Textarea Input */}
                   {currentQuestion?.type === 'textarea' && (
-                    <div>
-                      <textarea
-                        ref={inputRef as any}
-                        rows={4}
-                        value={currentAnswer || ''}
-                        onChange={(e) => handleAnswerChange(e.target.value)}
-                        placeholder={currentQuestion.placeholder?.[locale] || ''}
-                        className="w-full px-4 py-4 bg-brand-navy border border-white/[0.12] focus:border-brand-red rounded-xl text-white text-base font-medium placeholder:text-brand-gray/50 focus:outline-none focus:ring-1 focus:ring-brand-red transition-all"
-                      />
-                    </div>
+                    <textarea
+                      ref={inputRef as any}
+                      rows={3}
+                      value={currentAnswer || ''}
+                      onChange={(e) => handleAnswerChange(e.target.value)}
+                      placeholder={currentQuestion.placeholder?.[locale] || ''}
+                      className="w-full px-4 py-3.5 bg-brand-bg border border-brand-border focus:border-brand-red rounded-xl text-brand-navy text-sm font-medium placeholder:text-brand-muted focus:outline-none focus:ring-1 focus:ring-brand-red transition-all resize-none"
+                    />
                   )}
 
-                  {/* Radio Options */}
                   {currentQuestion?.type === 'radio' && currentQuestion.options && (
-                    <div className="space-y-3 max-h-[46vh] overflow-y-auto pr-1">
+                    <div className="space-y-2.5 max-h-[46vh] overflow-y-auto">
                       {currentQuestion.options.map((opt) => {
                         const isSelected = currentAnswer === opt.value;
                         return (
@@ -470,7 +486,8 @@ export const AssessmentModal: React.FC<AssessmentModalProps> = ({
                             type="button"
                             onClick={() => {
                               handleAnswerChange(opt.value);
-                              // Smooth auto-advance
+                              // Don't auto-advance on a blocking answer (e.g. no medical clearance)
+                              if (currentQuestion.blockingValues?.includes(opt.value)) return;
                               setTimeout(() => {
                                 if (currentIndex < activeQuestions.length - 1) {
                                   setCurrentIndex((prev) => prev + 1);
@@ -479,23 +496,23 @@ export const AssessmentModal: React.FC<AssessmentModalProps> = ({
                                 }
                               }, 200);
                             }}
-                            className={`w-full flex items-center justify-between p-4 rounded-xl border text-left rtl:text-right transition-all duration-150 min-h-[54px] ${
+                            className={`w-full flex items-center justify-between p-3.5 rounded-xl border text-left rtl:text-right transition-all duration-150 ${
                               isSelected
-                                ? 'bg-brand-navy border-brand-red text-white shadow-lg shadow-brand-red/10'
-                                : 'bg-brand-navy/60 border-white/[0.08] text-brand-silver hover:border-white/20 hover:bg-brand-navy'
+                                ? 'bg-brand-navy border-brand-navy text-white'
+                                : 'bg-brand-bg border-brand-border text-brand-navy hover:border-brand-navy/30'
                             }`}
                           >
-                            <span className="text-sm sm:text-base font-bold pr-2 rtl:pr-0 rtl:pl-2">
+                            <span className="text-sm font-bold pr-2 rtl:pr-0 rtl:pl-2">
                               {opt.label[locale]}
                             </span>
                             <div
-                              className={`w-5 h-5 rounded-full border flex items-center justify-center flex-shrink-0 ${
+                              className={`w-5 h-5 rounded-full border-2 flex items-center justify-center flex-shrink-0 ${
                                 isSelected
-                                  ? 'border-brand-red bg-brand-red text-white'
-                                  : 'border-white/20'
+                                  ? 'border-white bg-brand-red text-white'
+                                  : 'border-brand-border'
                               }`}
                             >
-                              {isSelected && <Check className="w-3.5 h-3.5 stroke-[3]" />}
+                              {isSelected && <Check className="w-3 h-3 stroke-[3]" />}
                             </div>
                           </button>
                         );
@@ -504,10 +521,25 @@ export const AssessmentModal: React.FC<AssessmentModalProps> = ({
                   )}
                 </div>
 
-                {/* Error Message */}
+                {/* Blocking notice (e.g. medical clearance required) */}
+                {isBlocked && currentQuestion?.blockingMessage && (
+                  <div className="p-4 bg-amber-50 border border-amber-200 rounded-xl text-[13px] text-amber-900 leading-relaxed flex items-start gap-2.5">
+                    <AlertCircle className="w-4 h-4 text-amber-600 flex-shrink-0 mt-0.5" />
+                    <span>{currentQuestion.blockingMessage[locale]}</span>
+                  </div>
+                )}
+
+                {/* Service disclaimer on the first question */}
+                {currentIndex === 0 && currentService.disclaimer && (
+                  <p className="text-[11px] text-brand-gray leading-relaxed border-t border-brand-border pt-3">
+                    {currentService.disclaimer[locale]}
+                  </p>
+                )}
+
+                {/* Error */}
                 {errorMessage && (
-                  <div className="p-3 bg-red-950/70 border border-brand-red/50 rounded-xl text-xs text-red-200 flex items-center gap-2 animate-in fade-in">
-                    <AlertCircle className="w-4 h-4 text-brand-red flex-shrink-0" />
+                  <div className="p-3 bg-red-50 border border-red-200 rounded-lg text-xs text-red-700 flex items-center gap-2">
+                    <AlertCircle className="w-4 h-4 text-red-500 flex-shrink-0" />
                     <span>{errorMessage}</span>
                   </div>
                 )}
@@ -516,16 +548,16 @@ export const AssessmentModal: React.FC<AssessmentModalProps> = ({
           )}
         </div>
 
-        {/* Modal Sticky Bottom Navigation Bar */}
+        {/* Bottom Nav */}
         {!submittedData && (
-          <div className="px-5 sm:px-6 py-4 bg-brand-surface border-t border-white/[0.08] flex items-center justify-between">
+          <div className="px-5 sm:px-6 py-3.5 bg-white border-t border-brand-border flex items-center justify-between">
             <button
               onClick={handleBack}
               disabled={currentIndex === 0 && !isReviewStep}
-              className={`inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold uppercase tracking-wider transition-colors ${
+              className={`inline-flex items-center gap-2 px-3.5 py-2.5 rounded-lg text-xs font-bold uppercase tracking-wider transition-colors ${
                 currentIndex === 0 && !isReviewStep
                   ? 'opacity-30 cursor-not-allowed text-brand-gray'
-                  : 'text-brand-silver hover:text-white hover:bg-white/5'
+                  : 'text-brand-navy hover:bg-brand-bg'
               }`}
             >
               <ArrowLeft className={`w-4 h-4 ${isRtl ? 'rotate-180' : ''}`} />
@@ -536,7 +568,7 @@ export const AssessmentModal: React.FC<AssessmentModalProps> = ({
               <button
                 onClick={handleSubmit}
                 disabled={isSubmitting}
-                className="inline-flex items-center gap-2 px-7 py-3 bg-brand-red hover:bg-brand-redHover disabled:opacity-50 text-white font-black text-xs sm:text-sm tracking-wider uppercase rounded-xl shadow-lg shadow-brand-red/30 transition-all active:scale-[0.99]"
+                className="inline-flex items-center gap-2 px-6 py-2.5 bg-brand-red hover:bg-brand-redHover disabled:opacity-50 text-white font-extrabold text-xs tracking-wider uppercase rounded-lg transition-colors"
               >
                 <span>{isSubmitting ? t.questionnaire.submitting : t.questionnaire.submit}</span>
                 <Check className="w-4 h-4" />
@@ -544,7 +576,8 @@ export const AssessmentModal: React.FC<AssessmentModalProps> = ({
             ) : (
               <button
                 onClick={handleNext}
-                className="inline-flex items-center gap-2 px-7 py-3 bg-brand-red hover:bg-brand-redHover text-white font-black text-xs sm:text-sm tracking-wider uppercase rounded-xl shadow-lg shadow-brand-red/30 transition-all active:scale-[0.99]"
+                disabled={isBlocked}
+                className="inline-flex items-center gap-2 px-6 py-2.5 bg-brand-navy hover:bg-brand-red disabled:opacity-30 disabled:hover:bg-brand-navy disabled:cursor-not-allowed text-white font-extrabold text-xs tracking-wider uppercase rounded-lg transition-colors"
               >
                 <span>{t.questionnaire.next}</span>
                 <ArrowRight className={`w-4 h-4 ${isRtl ? 'rotate-180' : ''}`} />

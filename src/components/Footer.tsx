@@ -1,78 +1,73 @@
 import React from 'react';
 import { useLanguage } from '../context/LanguageContext';
-import { Locale } from '../types';
-import { ShieldCheck } from 'lucide-react';
+import { MessageCircle, Mail } from 'lucide-react';
+
+// lucide-react v1 no longer ships brand icons
+const Instagram: React.FC<{ className?: string }> = ({ className }) => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className} aria-hidden="true">
+    <rect x="2" y="2" width="20" height="20" rx="5" />
+    <circle cx="12" cy="12" r="4" />
+    <circle cx="17.5" cy="6.5" r="0.6" fill="currentColor" />
+  </svg>
+);
 
 interface FooterProps {
   onOpenAdmin: () => void;
 }
 
 export const Footer: React.FC<FooterProps> = ({ onOpenAdmin }) => {
-  const { locale, setLocale, t } = useLanguage();
-
-  const languages: { code: Locale; label: string }[] = [
-    { code: 'fr', label: 'Français' },
-    { code: 'ar', label: 'العربية' },
-    { code: 'en', label: 'English' },
-  ];
+  const { t } = useLanguage();
 
   return (
-    <footer className="bg-brand-navy border-t border-white/[0.08] py-14 sm:py-18 text-brand-silver relative overflow-hidden">
-      {/* Background ambient light */}
-      <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[600px] h-32 bg-brand-surface/40 rounded-full blur-3xl pointer-events-none" />
+    <footer className="border-t border-brand-border bg-white">
+      <div className="max-w-6xl mx-auto px-5 sm:px-8 py-8 sm:py-10">
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-5">
+          {/* Logo */}
+          <button
+            onClick={onOpenAdmin}
+            className="hover:opacity-70 transition-opacity"
+            title="Coach Portal"
+          >
+            <img
+              src="/logo-header.png"
+              alt="BOUKRAA"
+              className="h-5 w-auto opacity-60"
+            />
+          </button>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        <div className="flex flex-col md:flex-row items-center justify-between gap-8 pb-10 border-b border-white/[0.08]">
-          
-          {/* Logo & Tagline */}
-          <div className="flex flex-col items-center md:items-start text-center md:text-left rtl:md:text-right">
-            <a href="#" className="mb-3 block focus:outline-none">
-              <img
-                src="/logo-header.png"
-                alt="BOUKRAA"
-                className="h-8 sm:h-9 w-auto object-contain opacity-95"
-              />
-            </a>
-            <p className="text-xs font-mono font-bold text-brand-red uppercase tracking-widest">
-              {t.footer.tagline}
-            </p>
-          </div>
-
-          {/* Quick links & Language Switcher in Footer */}
-          <div className="flex flex-wrap items-center justify-center gap-6 text-xs font-bold text-brand-gray">
-            <div className="flex items-center gap-1.5 p-1 rounded-xl bg-brand-surface border border-white/[0.08]">
-              {languages.map((l) => (
-                <button
-                  key={l.code}
-                  onClick={() => setLocale(l.code)}
-                  className={`px-3 py-1.5 rounded-lg text-xs transition-colors ${
-                    locale === l.code ? 'bg-brand-red text-white' : 'text-brand-gray hover:text-white'
-                  }`}
-                >
-                  {l.label}
-                </button>
-              ))}
-            </div>
-
-            <button
-              onClick={onOpenAdmin}
-              className="flex items-center gap-2 px-3.5 py-2 rounded-xl bg-brand-surface hover:bg-brand-elevated border border-white/[0.08] hover:text-white transition-colors"
+          {/* Social Links */}
+          <div className="flex items-center gap-4">
+            <a
+              href="https://instagram.com/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-9 h-9 rounded-full border border-brand-border flex items-center justify-center text-brand-gray hover:text-brand-red hover:border-brand-red transition-colors"
+              aria-label="Instagram"
             >
-              <ShieldCheck className="w-4 h-4 text-brand-red" />
-              <span>{t.footer.adminLink}</span>
-            </button>
+              <Instagram className="w-4 h-4" />
+            </a>
+            <a
+              href="https://wa.me/212600000000"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-9 h-9 rounded-full border border-brand-border flex items-center justify-center text-brand-gray hover:text-brand-red hover:border-brand-red transition-colors"
+              aria-label="WhatsApp"
+            >
+              <MessageCircle className="w-4 h-4" />
+            </a>
+            <a
+              href="mailto:contact@boukraa.com"
+              className="w-9 h-9 rounded-full border border-brand-border flex items-center justify-center text-brand-gray hover:text-brand-red hover:border-brand-red transition-colors"
+              aria-label="Email"
+            >
+              <Mail className="w-4 h-4" />
+            </a>
           </div>
 
-        </div>
-
-        {/* Bottom copyright & privacy statement */}
-        <div className="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-[11px] text-brand-gray font-medium text-center sm:text-left rtl:sm:text-right">
-          <div>
-            © {new Date().getFullYear()} BOUKRAA · Mohamed Amine Boukraa. {t.footer.rights}
-          </div>
-          <div className="text-brand-silver/70">
-            {t.footer.privatePolicy}
-          </div>
+          {/* Copyright */}
+          <p className="text-[11px] text-brand-muted font-medium tracking-wide">
+            {t.footer.copyright}
+          </p>
         </div>
       </div>
     </footer>
