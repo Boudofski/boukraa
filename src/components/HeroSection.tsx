@@ -96,13 +96,24 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onSelectService }) => 
                   {s.desc}
                 </p>
 
+                {'disclaimer' in s && s.disclaimer && (
+                  <p className="mt-3 pt-3 border-t border-brand-border/70 text-[11.5px] text-brand-gray/90 italic leading-snug">
+                    {s.disclaimer}
+                  </p>
+                )}
+
                 <span className="mt-5 w-full py-3 bg-brand-navy group-hover:bg-brand-red text-white text-[11px] font-bold tracking-[0.18em] uppercase rounded-xl transition-colors duration-200 text-center">
-                  {s.cta}
+                  {s.cta} →
                 </span>
               </button>
             );
           })}
         </div>
+
+        {/* Pricing note (Section 16) */}
+        <p className="mt-6 text-center text-[12.5px] text-brand-gray max-w-2xl mx-auto leading-relaxed">
+          {t.services.pricing}
+        </p>
       </div>
     </section>
   );

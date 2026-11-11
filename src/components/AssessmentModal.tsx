@@ -238,16 +238,6 @@ export const AssessmentModal: React.FC<AssessmentModalProps> = ({
     ? 100
     : Math.round(((currentIndex + 1) / (activeQuestions.length + 1)) * 100);
 
-  const getCoachWhatsAppUrl = () => {
-    const refCode = submittedData?.id || '';
-    const name = answers.fullName || '';
-    const textFr = `Bonjour Coach Mohamed Amine Boukraa. J'ai soumis mon bilan d'évaluation (Réf: ${refCode}). Je m'appelle ${name}.`;
-    const textAr = `السلام عليكم كوتش محمد أمين بوقراع، لقد أرسلت طلب التقييم الخاص بي برقم المرجع: ${refCode}. اسمي: ${name}.`;
-    const textEn = `Hello Coach Mohamed Amine Boukraa, I submitted my training assessment (Ref: ${refCode}). My name is ${name}.`;
-    const msg = locale === 'ar' ? textAr : locale === 'en' ? textEn : textFr;
-    return `https://wa.me/212600000000?text=${encodeURIComponent(msg)}`;
-  };
-
   return (
     <div className="fixed inset-0 z-50 overflow-y-auto bg-black/40 backdrop-blur-sm flex flex-col sm:items-center sm:justify-center sm:p-4">
       
@@ -294,9 +284,12 @@ export const AssessmentModal: React.FC<AssessmentModalProps> = ({
                 <span className="inline-block px-3 py-1 bg-green-50 border border-green-200 rounded-full text-[11px] font-bold text-green-700 uppercase tracking-wider mb-2">
                   {t.postSubmission.statusBadge}
                 </span>
-                <h3 className="text-xl sm:text-2xl font-black text-brand-navy uppercase tracking-tight mb-2">
+                <h3 className="text-xl sm:text-2xl font-black text-brand-navy uppercase tracking-tight mb-1.5">
                   {t.postSubmission.title}
                 </h3>
+                <p className="text-xs sm:text-sm font-medium text-brand-navy/80 mb-2">
+                  {t.postSubmission.subtitle}
+                </p>
                 <p className="text-xs sm:text-sm text-brand-gray">
                   {t.postSubmission.referenceLabel}{' '}
                   <span className="font-mono font-black text-brand-navy bg-brand-bg px-2.5 py-0.5 rounded-md border border-brand-border ml-1">
@@ -310,27 +303,18 @@ export const AssessmentModal: React.FC<AssessmentModalProps> = ({
                   <Clock className="w-3.5 h-3.5 text-brand-red flex-shrink-0" />
                   <span>{t.postSubmission.scarcityHeading}</span>
                 </div>
-                <p className="text-xs text-brand-navy/70 leading-relaxed">{t.postSubmission.p1}</p>
-                <p className="text-xs text-brand-navy/70 leading-relaxed">{t.postSubmission.p2}</p>
-                <p className="text-[11px] text-brand-gray leading-relaxed pt-2 border-t border-brand-border">
-                  {t.postSubmission.p3}
+                <p className="text-xs text-brand-navy/80 leading-relaxed">{t.postSubmission.p1}</p>
+                <p className="text-xs text-brand-navy/80 leading-relaxed">{t.postSubmission.p2}</p>
+                <p className="text-xs text-brand-navy/80 leading-relaxed">{t.postSubmission.p3}</p>
+                <p className="text-xs font-semibold text-brand-navy leading-relaxed pt-2 border-t border-brand-border">
+                  {t.postSubmission.p4}
                 </p>
               </div>
 
-              <div className="pt-1 flex flex-col sm:flex-row gap-3 justify-center">
-                <a
-                  href={getCoachWhatsAppUrl()}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs tracking-wider uppercase rounded-lg transition-colors"
-                >
-                  <MessageSquare className="w-4 h-4" />
-                  <span>{t.postSubmission.whatsAppAction}</span>
-                </a>
-
+              <div className="pt-1 flex justify-center">
                 <button
                   onClick={onClose}
-                  className="w-full sm:w-auto px-5 py-3 bg-brand-bg hover:bg-brand-border text-brand-navy font-bold text-xs tracking-wider uppercase rounded-lg border border-brand-border transition-colors"
+                  className="w-full sm:w-auto px-8 py-3 bg-brand-navy hover:bg-brand-red text-white font-bold text-xs tracking-wider uppercase rounded-lg transition-colors"
                 >
                   {t.postSubmission.closeBtn}
                 </button>

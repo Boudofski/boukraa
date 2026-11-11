@@ -188,7 +188,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ isOpen, onClose }) => 
     const clientName = sub.fullName;
     let greeting = `Bonjour ${clientName}, c'est Coach Mohamed Amine Boukraa. J'ai bien reçu votre bilan d'évaluation (${sub.id}) pour le service ${sub.service}.`;
     if (sub.language === 'ar') {
-      greeting = `السلام عليكم ${clientName}، معك الكوتش محمد أمين بوقراع. لقد استلمت تقييمك الرياضي (${sub.id}) وأود مناقشة خطتك التدريبية.`;
+      greeting = `السلام عليكم ${clientName}، معك الكوتش بوكرع محمد أمين. لقد استلمت تقييمك الرياضي (${sub.id}) وأود مناقشة خطتك التدريبية.`;
     } else if (sub.language === 'en') {
       greeting = `Hello ${clientName}, this is Coach Mohamed Amine Boukraa. I reviewed your training assessment (${sub.id}) and would like to connect.`;
     }

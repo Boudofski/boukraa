@@ -55,6 +55,23 @@ export const AboutSection: React.FC = () => {
             </div>
           </div>
         </div>
+
+        {/* Courses — Coming Soon (Section 22) */}
+        <div className="mt-16 sm:mt-20 pt-12 border-t border-brand-border">
+          <div className="rounded-2xl bg-brand-bg border border-brand-border p-6 sm:p-8 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+            <div>
+              <span className="inline-block px-2.5 py-1 rounded-full bg-brand-red/10 text-brand-red text-[10px] font-extrabold tracking-[0.18em] uppercase mb-2.5">
+                {t.courses.badge}
+              </span>
+              <h3 className="text-base sm:text-lg font-black uppercase tracking-tight text-brand-navy">
+                {t.courses.title}
+              </h3>
+              <p className="mt-1 text-[13.5px] text-brand-gray leading-relaxed">
+                {t.courses.desc}
+              </p>
+            </div>
+          </div>
+        </div>
       </div>
     </section>
   );
