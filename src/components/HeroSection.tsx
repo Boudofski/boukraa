@@ -103,7 +103,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onSelectService }) => 
                 )}
 
                 <span className="mt-5 w-full py-3 bg-brand-navy group-hover:bg-brand-red text-white text-[11px] font-bold tracking-[0.18em] uppercase rounded-xl transition-colors duration-200 text-center">
-                  {s.cta} →
+                  {s.cta} {isRtl ? '←' : '→'}
                 </span>
               </button>
             );
