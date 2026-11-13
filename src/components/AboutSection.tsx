@@ -10,11 +10,11 @@ export const AboutSection: React.FC = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-10 sm:gap-16 items-center">
           {/* Photo */}
           <div className="">
-            <div className="relative rounded-2xl overflow-hidden aspect-[4/5] max-w-md mx-auto md:mx-0">
+            <div className="relative rounded-2xl overflow-hidden aspect-square max-w-md mx-auto md:mx-0 shadow-card">
               <img
                 src="/assets/boukraa-coach-pitch.jpg"
-                alt="Coach Boukraa"
-                className="w-full h-full object-cover"
+                alt="Coach Mohamed Amine Boukraa"
+                className="w-full h-full object-cover object-center"
               />
               {/* Subtle red accent line */}
               <div className="absolute bottom-0 left-0 right-0 h-1 bg-brand-red" />
