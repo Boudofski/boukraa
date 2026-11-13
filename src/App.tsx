@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Header } from './components/Header';
 import { HeroSection } from './components/HeroSection';
-import { HowItWorks } from './components/HowItWorks';
 import { AboutSection } from './components/AboutSection';
 import { Footer } from './components/Footer';
 import { AssessmentModal } from './components/AssessmentModal';
@@ -43,7 +42,6 @@ export const App: React.FC = () => {
 
       <main className="flex-1">
         <HeroSection onSelectService={(id) => handleStartAssessment(id)} />
-        <HowItWorks />
         <AboutSection />
       </main>
 

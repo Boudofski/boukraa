@@ -24,7 +24,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onSelectService }) => 
   ];
 
   return (
-    <section>
+    <section id="home" className="scroll-mt-16">
       {/* ---------- HERO ---------- */}
       <div className="relative overflow-hidden bg-brand-navy">
         {/* Mobile / tablet: full-bleed photo behind the text */}
@@ -73,7 +73,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onSelectService }) => 
       </div>
 
       {/* ---------- SERVICES (overlapping the hero) ---------- */}
-      <div id="services" className="max-w-6xl mx-auto px-5 sm:px-8 -mt-10 relative z-10 scroll-mt-20">
+      <div id="services" className="max-w-6xl mx-auto px-5 sm:px-8 -mt-10 pb-14 sm:pb-20 relative z-10 scroll-mt-20">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-5">
           {services.map(({ num, serviceId, key }) => {
             const s = t.services[key];

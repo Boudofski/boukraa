@@ -5,7 +5,7 @@ export const AboutSection: React.FC = () => {
   const { t } = useLanguage();
 
   return (
-    <section className="py-16 sm:py-24 bg-white">
+    <section id="about" className="py-16 sm:py-24 bg-white scroll-mt-16">
       <div className="max-w-6xl mx-auto px-5 sm:px-8">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-10 sm:gap-16 items-center">
           {/* Photo */}

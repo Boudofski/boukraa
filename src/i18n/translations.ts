@@ -3,6 +3,9 @@ import { adminTranslations } from './adminTranslations';
 export const translations = {
   fr: {
     nav: {
+      home: 'Accueil',
+      services: 'Services',
+      about: 'À propos',
       startAssessment: 'COMMENCER',
       adminPortal: 'Espace Coach',
     },
@@ -89,6 +92,9 @@ export const translations = {
 
   en: {
     nav: {
+      home: 'Home',
+      services: 'Services',
+      about: 'About',
       startAssessment: 'START',
       adminPortal: 'Coach Portal',
     },
@@ -175,6 +181,9 @@ export const translations = {
 
   ar: {
     nav: {
+      home: 'الرئيسية',
+      services: 'الخدمات',
+      about: 'عنّي',
       startAssessment: 'ابدأ',
       adminPortal: 'بوابة المدرب',
     },
