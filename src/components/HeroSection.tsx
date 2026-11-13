@@ -32,7 +32,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onSelectService }) => 
           <img
             src={HERO_IMG}
             alt=""
-            className="w-full h-full object-cover object-[50%_15%]"
+            className="w-full h-full object-cover object-[50%_10%]"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-brand-navy via-brand-navy/80 to-brand-navy/0" />
         </div>
