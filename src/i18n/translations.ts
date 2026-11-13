@@ -28,6 +28,12 @@ export const translations = {
         desc: 'Un entraînement individuel construit autour de vos objectifs, de votre niveau et de vos besoins.',
         cta: 'FAIRE UNE DEMANDE',
       },
+      s4: {
+        title: 'FORMATIONS ÉDUCATIVES',
+        desc: 'Formations pratiques et basées sur la science, conçues pour aider les coachs et praticiens à approfondir leurs connaissances, comprendre les principes d’entraînement et les appliquer efficacement sur le terrain.',
+        badge: 'BIENTÔT DISPONIBLE',
+        cta: 'BIENTÔT DISPONIBLE',
+      },
       pricing:
         'Chaque programme est personnalisé. Le prix dépend du type de programme, de sa durée et du niveau d’accompagnement. Envoyez votre demande pour recevoir l’option et le tarif adaptés.',
     },
@@ -108,6 +114,12 @@ export const translations = {
         desc: 'One-to-one training built around your goals, level and individual needs.',
         cta: 'START A REQUEST',
       },
+      s4: {
+        title: 'EDUCATIONAL COURSES',
+        desc: 'Practical, science-based educational courses designed to help coaches and practitioners expand their knowledge, understand training principles, and apply them effectively in the field.',
+        badge: 'COMING SOON',
+        cta: 'COMING SOON',
+      },
       pricing:
         'Every program is personalized. The price depends on the type of program, its duration, and the level of coaching support. Submit your request to receive the appropriate option and pricing.',
     },
@@ -187,6 +199,12 @@ export const translations = {
         title: 'التدريب الخاص',
         desc: 'تدريب فردي مبني حول أهدافك ومستواك واحتياجاتك الخاصة.',
         cta: 'قدّم طلبك',
+      },
+      s4: {
+        title: 'الدورات التعليمية',
+        desc: 'دورات تعليمية عملية قائمة على العلم، مصممة لمساعدة المدربين والممارسين على توسيع معارفهم، وفهم مبادئ التدريب، وتطبيقها بفعالية في الميدان.',
+        badge: 'قريباً',
+        cta: 'قريباً',
       },
       pricing:
         'كل برنامج مخصص. يعتمد السعر على نوع البرنامج ومدته ومستوى المتابعة. أرسل طلبك لتحصل على الخيار والسعر المناسبين.',

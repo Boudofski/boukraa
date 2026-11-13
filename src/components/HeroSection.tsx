@@ -12,10 +12,15 @@ const HERO_IMG = '/assets/boukraa-hero-portrait.jpg';
 export const HeroSection: React.FC<HeroSectionProps> = ({ onSelectService }) => {
   const { t, isRtl } = useLanguage();
 
-  const services: Array<{ num: string; serviceId: ServiceId; key: 's1' | 's2' | 's3' }> = [
+  const services: Array<{
+    num: string;
+    serviceId?: ServiceId;
+    key: 's1' | 's2' | 's3' | 's4';
+  }> = [
     { num: '01', serviceId: 'strength_conditioning', key: 's1' },
     { num: '02', serviceId: 'reathletisation', key: 's2' },
     { num: '03', serviceId: 'private_coaching', key: 's3' },
+    { num: '04', key: 's4' },
   ];
 
   return (
@@ -69,21 +74,41 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onSelectService }) => 
 
       {/* ---------- SERVICES (overlapping the hero) ---------- */}
       <div id="services" className="max-w-6xl mx-auto px-5 sm:px-8 -mt-10 relative z-10 scroll-mt-20">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 lg:gap-5">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-5">
           {services.map(({ num, serviceId, key }) => {
             const s = t.services[key];
+            const isComingSoon = !serviceId;
+
             return (
               <button
-                key={serviceId}
+                key={key}
                 type="button"
-                onClick={() => onSelectService(serviceId)}
-                className="group text-start bg-white rounded-2xl p-6 border border-brand-border shadow-card hover:shadow-card-hover hover:-translate-y-0.5 transition-all duration-300 flex flex-col"
+                onClick={serviceId ? () => onSelectService(serviceId) : undefined}
+                aria-disabled={isComingSoon || undefined}
+                className={`group text-start bg-white rounded-2xl p-6 border border-brand-border shadow-card transition-all duration-300 flex flex-col ${
+                  isComingSoon
+                    ? 'cursor-default'
+                    : 'hover:shadow-card-hover hover:-translate-y-0.5'
+                }`}
               >
-                <div className="flex items-center justify-between">
-                  <span className="text-[11px] font-bold tracking-[0.18em] text-brand-red uppercase">
-                    {num}
-                  </span>
-                  <span className="w-8 h-8 rounded-full border border-brand-border flex items-center justify-center text-brand-navy group-hover:bg-brand-red group-hover:border-brand-red group-hover:text-white transition-colors">
+                <div className="flex items-center justify-between gap-2">
+                  <div className="flex items-center gap-2">
+                    <span className="text-[11px] font-bold tracking-[0.18em] text-brand-red uppercase">
+                      {num}
+                    </span>
+                    {'badge' in s && s.badge && (
+                      <span className="px-2 py-0.5 rounded-full bg-brand-bg border border-brand-border text-[9.5px] font-bold tracking-[0.14em] text-brand-gray uppercase">
+                        {s.badge}
+                      </span>
+                    )}
+                  </div>
+                  <span
+                    className={`w-8 h-8 rounded-full border border-brand-border flex items-center justify-center text-brand-navy transition-colors flex-shrink-0 ${
+                      isComingSoon
+                        ? 'opacity-50'
+                        : 'group-hover:bg-brand-red group-hover:border-brand-red group-hover:text-white'
+                    }`}
+                  >
                     <ArrowRight className={`w-3.5 h-3.5 ${isRtl ? 'rotate-180' : ''}`} />
                   </span>
                 </div>
@@ -102,7 +127,13 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onSelectService }) => 
                   </p>
                 )}
 
-                <span className="mt-5 w-full py-3 bg-brand-navy group-hover:bg-brand-red text-white text-[11px] font-bold tracking-[0.18em] uppercase rounded-xl transition-colors duration-200 text-center">
+                <span
+                  className={`mt-5 w-full py-3 text-[11px] font-bold tracking-[0.18em] uppercase rounded-xl transition-colors duration-200 text-center ${
+                    isComingSoon
+                      ? 'bg-brand-bg text-brand-gray border border-brand-border'
+                      : 'bg-brand-navy group-hover:bg-brand-red text-white'
+                  }`}
+                >
                   {s.cta} {isRtl ? '←' : '→'}
                 </span>
               </button>
