@@ -10,6 +10,7 @@ import {
   Eye,
   Trash2,
   RefreshCw,
+  Mail,
 } from 'lucide-react';
 
 interface AdminPortalProps {
@@ -504,21 +505,45 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ isOpen, onClose }) => 
               
               {/* Quick Action Ribbon */}
               <div className="flex flex-wrap items-center justify-between gap-3 p-4 rounded-2xl bg-brand-navy border border-white/[0.08]">
-                <div>
-                  <div className="text-xs text-brand-gray font-medium">WhatsApp direct :</div>
-                  <div className="font-mono text-sm font-bold text-white">
-                    {selectedSubmission.whatsapp}
-                  </div>
+                <div className="space-y-1">
+                  {selectedSubmission.whatsapp && (
+                    <div className="flex items-center gap-2">
+                      <span className="text-xs text-brand-gray font-medium">WhatsApp :</span>
+                      <span className="font-mono text-xs sm:text-sm font-bold text-white">
+                        {selectedSubmission.whatsapp}
+                      </span>
+                    </div>
+                  )}
+                  {(selectedSubmission.email || selectedSubmission.answers?.email) && (
+                    <div className="flex items-center gap-2">
+                      <span className="text-xs text-brand-gray font-medium">Email :</span>
+                      <span className="font-mono text-xs sm:text-sm font-bold text-white">
+                        {selectedSubmission.email || selectedSubmission.answers?.email}
+                      </span>
+                    </div>
+                  )}
                 </div>
 
-                <div className="flex items-center gap-2">
-                  <button
-                    onClick={() => openClientWhatsApp(selectedSubmission)}
-                    className="inline-flex items-center gap-2 px-4 py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs uppercase tracking-wider rounded-xl shadow transition-all"
-                  >
-                    <MessageSquare className="w-4 h-4" />
-                    <span>{t.admin.detailsModal.openWhatsApp}</span>
-                  </button>
+                <div className="flex items-center flex-wrap gap-2">
+                  {(selectedSubmission.email || selectedSubmission.answers?.email) && (
+                    <a
+                      href={`mailto:${selectedSubmission.email || selectedSubmission.answers?.email}?subject=${encodeURIComponent(`[BOUKRAA Coaching] Votre demande de suivi (${selectedSubmission.id})`)}`}
+                      className="inline-flex items-center gap-2 px-3.5 py-2.5 bg-brand-red hover:bg-brand-redHover text-white font-bold text-xs uppercase tracking-wider rounded-xl shadow transition-all"
+                    >
+                      <Mail className="w-4 h-4" />
+                      <span>Répondre par Email</span>
+                    </a>
+                  )}
+
+                  {selectedSubmission.whatsapp && (
+                    <button
+                      onClick={() => openClientWhatsApp(selectedSubmission)}
+                      className="inline-flex items-center gap-2 px-3.5 py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs uppercase tracking-wider rounded-xl shadow transition-all"
+                    >
+                      <MessageSquare className="w-4 h-4" />
+                      <span>{t.admin.detailsModal.openWhatsApp}</span>
+                    </button>
+                  )}
 
                   <button
                     onClick={() => handleDelete(selectedSubmission.id)}

@@ -31,6 +31,7 @@ db.exec(`
     fullName TEXT NOT NULL,
     age TEXT NOT NULL,
     whatsapp TEXT NOT NULL,
+    email TEXT DEFAULT '',
     answers TEXT NOT NULL,
     status TEXT NOT NULL DEFAULT 'NEW',
     coachNotes TEXT DEFAULT '',
@@ -38,6 +39,12 @@ db.exec(`
     createdAt TEXT NOT NULL
   );
 `);
+
+try {
+  db.exec(`ALTER TABLE submissions ADD COLUMN email TEXT DEFAULT ''`);
+} catch (e) {
+  // Column already exists
+}
 
 // Simple secure auth middleware for admin
 const requireAdmin = (req: express.Request, res: express.Response, next: express.NextFunction) => {
@@ -67,19 +74,20 @@ app.post('/api/admin/login', handleAdminAuth);
 // Create assessment submission
 app.post('/api/submissions', (req, res) => {
   try {
-    const { service, fullName, age, whatsapp, answers, language } = req.body;
+    const { service, fullName, age, whatsapp, email, answers, language } = req.body;
 
-    if (!fullName || !whatsapp || !service) {
-      return res.status(400).json({ error: 'Full name, WhatsApp, and service are required' });
+    if (!fullName || (!whatsapp && !email) || !service) {
+      return res.status(400).json({ error: 'Full name, contact (WhatsApp or Email), and service are required' });
     }
 
     const randomSuffix = Math.floor(1000 + Math.random() * 9000);
     const id = `BK-${new Date().getFullYear()}-${randomSuffix}`;
     const createdAt = new Date().toISOString();
+    const clientEmail = (email || answers?.email || (whatsapp && String(whatsapp).includes('@') ? whatsapp : '')) ? String(email || answers?.email || (whatsapp && String(whatsapp).includes('@') ? whatsapp : '')).trim() : '';
 
     const insertStmt = db.prepare(`
-      INSERT INTO submissions (id, service, fullName, age, whatsapp, answers, status, coachNotes, language, createdAt)
-      VALUES (?, ?, ?, ?, ?, ?, 'NEW', '', ?, ?)
+      INSERT INTO submissions (id, service, fullName, age, whatsapp, email, answers, status, coachNotes, language, createdAt)
+      VALUES (?, ?, ?, ?, ?, ?, ?, 'NEW', '', ?, ?)
     `);
 
     insertStmt.run(
@@ -87,13 +95,14 @@ app.post('/api/submissions', (req, res) => {
       service,
       fullName.trim(),
       String(age || ''),
-      whatsapp.trim(),
+      String(whatsapp || '').trim(),
+      clientEmail,
       JSON.stringify(answers || {}),
       language || 'fr',
       createdAt
     );
 
-    console.log(`[NEW SUBMISSION] ${id} - ${fullName} (${service})`);
+    console.log(`[NEW SUBMISSION] ${id} - ${fullName} (${service}) | Email: ${clientEmail || 'N/A'}`);
 
     return res.status(201).json({
       success: true,

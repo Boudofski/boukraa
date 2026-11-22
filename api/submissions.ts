@@ -1,5 +1,6 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 import { submissionsDb, StoredSubmission } from './_db.js';
+import { sendSubmissionEmail } from './_email.js';
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   // Enable CORS
@@ -16,22 +17,27 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   }
 
   try {
-    const { service, fullName, age, whatsapp, answers, language } = req.body || {};
+    const { service, fullName, age, whatsapp, email, answers, language } = req.body || {};
 
-    if (!fullName || !whatsapp || !service) {
-      return res.status(400).json({ error: 'Full name, WhatsApp, and service are required' });
+    if (!fullName || (!whatsapp && !email) || !service) {
+      return res.status(400).json({ error: 'Full name, contact (WhatsApp or Email), and service are required' });
     }
 
     const randomSuffix = Math.floor(1000 + Math.random() * 9000);
     const id = `BK-${new Date().getFullYear()}-${randomSuffix}`;
     const createdAt = new Date().toISOString();
 
+    const clientEmail = (email || answers?.email || (whatsapp && String(whatsapp).includes('@') ? whatsapp : ''))
+      ? String(email || answers?.email || (whatsapp && String(whatsapp).includes('@') ? whatsapp : '')).trim()
+      : undefined;
+
     const submissionRecord: StoredSubmission = {
       id,
       service,
       fullName: String(fullName).trim(),
       age: String(age || ''),
-      whatsapp: String(whatsapp).trim(),
+      whatsapp: String(whatsapp || '').trim(),
+      email: clientEmail,
       answers: answers || {},
       status: 'NEW',
       coachNotes: '',
@@ -41,11 +47,20 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
     submissionsDb.add(submissionRecord);
 
-    console.log(`[VERCEL NEW SUBMISSION] ID: ${id} | Name: ${fullName} | Service: ${service} | WhatsApp: ${whatsapp}`);
+    console.log(
+      `[VERCEL NEW SUBMISSION] ID: ${id} | Name: ${fullName} | Service: ${service} | Email: ${clientEmail || 'N/A'} | WhatsApp: ${whatsapp || 'N/A'}`
+    );
+
+    // Send email notification safely to coach@boukraa.net
+    const emailResult = await sendSubmissionEmail(submissionRecord).catch((err) => {
+      console.error('[EMAIL NOTIFICATION EXCEPTION]', err);
+      return { success: false, error: err?.message };
+    });
 
     return res.status(201).json({
       success: true,
       id,
+      emailSent: emailResult.success,
       message: 'Request received successfully',
     });
   } catch (error: any) {

@@ -22,7 +22,7 @@ export interface Question {
   title: Record<Locale, string>;
   subtitle?: Record<Locale, string>;
   /** 'contact' accepts either an email address or a phone/WhatsApp number */
-  type: 'text' | 'number' | 'radio' | 'textarea' | 'tel' | 'contact';
+  type: 'text' | 'number' | 'radio' | 'textarea' | 'tel' | 'contact' | 'email';
   options?: QuestionOption[];
   placeholder?: Record<Locale, string>;
   required?: boolean;
@@ -49,6 +49,7 @@ export interface AssessmentSubmission {
   fullName: string;
   age: number | string;
   whatsapp: string;
+  email?: string;
   answers: Record<string, any>;
   status: SubmissionStatus;
   createdAt: string;

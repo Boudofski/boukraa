@@ -4,6 +4,7 @@ export interface StoredSubmission {
   fullName: string;
   age: string;
   whatsapp: string;
+  email?: string;
   answers: Record<string, any>;
   status: string;
   coachNotes: string;

@@ -101,6 +101,19 @@ export const AssessmentModal: React.FC<AssessmentModalProps> = ({
         setErrorMessage(t.questionnaire.requiredError);
         return false;
       }
+      if (currentQuestion.type === 'email') {
+        const isEmail = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(String(val).trim());
+        if (!isEmail) {
+          setErrorMessage(
+            locale === 'fr'
+              ? 'Veuillez saisir une adresse email valide.'
+              : locale === 'ar'
+              ? 'يرجى إدخال بريد إلكتروني صالح.'
+              : 'Please enter a valid email address.'
+          );
+          return false;
+        }
+      }
       if (currentQuestion.type === 'contact') {
         const str = String(val).trim();
         const isEmail = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(str);
@@ -189,6 +202,7 @@ export const AssessmentModal: React.FC<AssessmentModalProps> = ({
         fullName: answers.fullName || '',
         age: answers.age || '',
         whatsapp: answers.whatsapp || '',
+        email: answers.email || '',
         answers,
         language: locale,
       };
@@ -425,23 +439,44 @@ export const AssessmentModal: React.FC<AssessmentModalProps> = ({
                   {(currentQuestion?.type === 'text' ||
                     currentQuestion?.type === 'tel' ||
                     currentQuestion?.type === 'contact' ||
+                    currentQuestion?.type === 'email' ||
                     currentQuestion?.type === 'number') && (
                     <input
                       ref={inputRef as any}
-                      type={currentQuestion.type === 'number' ? 'number' : 'text'}
+                      type={
+                        currentQuestion.type === 'number'
+                          ? 'number'
+                          : currentQuestion.type === 'email'
+                          ? 'email'
+                          : currentQuestion.type === 'tel'
+                          ? 'tel'
+                          : 'text'
+                      }
                       inputMode={
                         currentQuestion.type === 'number'
                           ? 'numeric'
-                          : currentQuestion.type === 'contact'
+                          : currentQuestion.type === 'contact' || currentQuestion.type === 'email'
                           ? 'email'
                           : currentQuestion.type === 'tel'
                           ? 'tel'
                           : 'text'
                       }
                       autoComplete={
-                        currentQuestion.id === 'fullName' ? 'name' : currentQuestion.type === 'contact' ? 'email' : 'off'
+                        currentQuestion.id === 'fullName'
+                          ? 'name'
+                          : currentQuestion.type === 'contact' || currentQuestion.type === 'email'
+                          ? 'email'
+                          : currentQuestion.id === 'whatsapp'
+                          ? 'tel'
+                          : 'off'
                       }
-                      dir={currentQuestion.type === 'contact' ? 'ltr' : undefined}
+                      dir={
+                        currentQuestion.type === 'contact' ||
+                        currentQuestion.type === 'email' ||
+                        currentQuestion.type === 'tel'
+                          ? 'ltr'
+                          : undefined
+                      }
                       value={currentAnswer || ''}
                       onChange={(e) => handleAnswerChange(e.target.value)}
                       placeholder={currentQuestion.placeholder?.[locale] || ''}

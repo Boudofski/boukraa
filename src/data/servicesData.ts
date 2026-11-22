@@ -21,6 +21,27 @@ const age: Question = {
   placeholder: { fr: 'Ex : 25', ar: 'مثال: 25', en: 'e.g. 25' },
 };
 
+const emailQuestion: Question = {
+  id: 'email',
+  title: {
+    fr: 'Quelle est votre adresse email ?',
+    ar: 'ما هو بريدك الإلكتروني؟',
+    en: 'What is your email address?',
+  },
+  subtitle: {
+    fr: 'Pour recevoir la réponse du coach et votre proposition personnalisée.',
+    ar: 'لتلقي رد المدرب ومقترح المتابعة الخاص بك.',
+    en: 'To receive the coach’s personal response and your custom proposal.',
+  },
+  type: 'email',
+  required: true,
+  placeholder: {
+    fr: 'votre.email@exemple.com',
+    ar: 'your.name@example.com',
+    en: 'your.name@example.com',
+  },
+};
+
 const whatsapp: Question = {
   id: 'whatsapp',
   title: { fr: 'Quel est votre numéro WhatsApp ?', ar: 'ما هو رقم الواتساب الخاص بك؟', en: 'What is your WhatsApp number?' },
@@ -150,7 +171,7 @@ export const servicesData: ServiceDefinition[] = [
       en: 'Personalized training designed around your goals, level and available training time.',
     },
     ctaText: { fr: 'COMMENCER LE BILAN', ar: 'ابدأ التقييم', en: 'START ASSESSMENT' },
-    questions: [fullName, age, whatsapp, sport(), mainGoal, trainingLevel, limitations, limitationsExplanation, programDuration, trainingFrequency],
+    questions: [fullName, age, emailQuestion, whatsapp, sport(), mainGoal, trainingLevel, limitations, limitationsExplanation, programDuration, trainingFrequency],
   },
 
   /* ---------------- 02 — RÉATHLÉTISATION ---------------- */
@@ -172,6 +193,7 @@ export const servicesData: ServiceDefinition[] = [
     questions: [
       fullName,
       age,
+      emailQuestion,
       whatsapp,
       sport(),
       {
@@ -253,6 +275,6 @@ export const servicesData: ServiceDefinition[] = [
       en: 'One-to-one training built around your goals, level and individual needs.',
     },
     ctaText: { fr: 'FAIRE UNE DEMANDE', ar: 'قدّم طلبك', en: 'START A REQUEST' },
-    questions: [fullName, age, whatsapp, sport(), mainGoal, trainingLevel, limitations, limitationsExplanation, trainingFrequency],
+    questions: [fullName, age, emailQuestion, whatsapp, sport(), mainGoal, trainingLevel, limitations, limitationsExplanation, trainingFrequency],
   },
 ];
