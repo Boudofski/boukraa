@@ -712,18 +712,29 @@ export async function sendSubmissionEmail(submission: StoredSubmission): Promise
 }> {
   const envRecipients = process.env.NOTIFICATION_EMAIL
     ? process.env.NOTIFICATION_EMAIL.split(',').map((e) => e.trim()).filter(Boolean)
-    : ['coach@boukraa.com', 'coach@boukraa.net'];
+    : ['coach@boukraa.net', 'coach@boukraa.com'];
 
   const { subject, html, text, replyToEmail } = buildEmailContent(submission);
 
-  return sendEmailWithProvider({
-    to: envRecipients,
-    subject,
-    html,
-    text,
-    replyToEmail,
-    replyToName: submission.fullName,
-  });
+  // Send to each recipient independently so that one invalid domain never blocks the other
+  const results = await Promise.allSettled(
+    envRecipients.map((recipient) =>
+      sendEmailWithProvider({
+        to: [recipient],
+        subject,
+        html,
+        text,
+        replyToEmail,
+        replyToName: submission.fullName,
+      })
+    )
+  );
+
+  const successful = results.some((r) => r.status === 'fulfilled' && r.value.success);
+  return {
+    success: successful,
+    provider: 'hostinger-api',
+  };
 }
 
 /**
@@ -751,7 +762,7 @@ export async function sendApplicantAutoReply(submission: StoredSubmission): Prom
     subject,
     html,
     text,
-    replyToEmail: 'coach@boukraa.com',
+    replyToEmail: process.env.REPLY_TO_EMAIL || 'coach@boukraa.net',
     replyToName: 'Coach Mohamed Amine Boukraa',
   });
 }
