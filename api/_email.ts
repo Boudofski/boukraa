@@ -702,7 +702,7 @@ async function sendEmailWithProvider({
 }
 
 /**
- * Send notification to Coach Boukraa (delivered to coach@boukraa.com and coach@boukraa.net)
+ * Send notification to Coach Boukraa (delivered to coach@boukraa.net)
  */
 export async function sendSubmissionEmail(submission: StoredSubmission): Promise<{
   success: boolean;
@@ -712,7 +712,7 @@ export async function sendSubmissionEmail(submission: StoredSubmission): Promise
 }> {
   const envRecipients = process.env.NOTIFICATION_EMAIL
     ? process.env.NOTIFICATION_EMAIL.split(',').map((e) => e.trim()).filter(Boolean)
-    : ['coach@boukraa.net', 'coach@boukraa.com'];
+    : ['coach@boukraa.net'];
 
   const { subject, html, text, replyToEmail } = buildEmailContent(submission);
 
