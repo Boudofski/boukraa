@@ -1,6 +1,6 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 import { submissionsDb, StoredSubmission } from './_db.js';
-import { sendSubmissionEmail } from './_email.js';
+import { sendSubmissionEmail, sendApplicantAutoReply } from './_email.js';
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   // Enable CORS
@@ -51,16 +51,23 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       `[VERCEL NEW SUBMISSION] ID: ${id} | Name: ${fullName} | Service: ${service} | Email: ${clientEmail || 'N/A'} | WhatsApp: ${whatsapp || 'N/A'}`
     );
 
-    // Send email notification safely to coach@boukraa.net
-    const emailResult = await sendSubmissionEmail(submissionRecord).catch((err) => {
-      console.error('[EMAIL NOTIFICATION EXCEPTION]', err);
-      return { success: false, error: err?.message };
-    });
+    // Send coach notification and applicant auto-reply concurrently
+    const [coachEmailResult, autoReplyResult] = await Promise.all([
+      sendSubmissionEmail(submissionRecord).catch((err) => {
+        console.error('[COACH NOTIFICATION EXCEPTION]', err);
+        return { success: false, error: err?.message };
+      }),
+      sendApplicantAutoReply(submissionRecord).catch((err) => {
+        console.error('[APPLICANT AUTO-REPLY EXCEPTION]', err);
+        return { success: false, error: err?.message };
+      }),
+    ]);
 
     return res.status(201).json({
       success: true,
       id,
-      emailSent: emailResult.success,
+      emailSent: coachEmailResult.success,
+      autoReplySent: autoReplyResult.success,
       message: 'Request received successfully',
     });
   } catch (error: any) {

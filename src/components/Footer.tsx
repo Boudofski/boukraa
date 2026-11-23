@@ -77,12 +77,12 @@ export const Footer: React.FC<FooterProps> = ({ onOpenAdmin }) => {
               <TikTokIcon className="w-4 h-4" />
             </a>
             <a
-              href="mailto:coach@boukraa.net"
+              href="mailto:coach@boukraa.com"
               className="inline-flex items-center gap-2 h-9 px-3.5 rounded-full border border-brand-border text-xs font-semibold text-brand-gray hover:text-brand-red hover:border-brand-red transition-colors"
-              aria-label="Email coach@boukraa.net"
+              aria-label="Email coach@boukraa.com"
             >
               <Mail className="w-3.5 h-3.5" />
-              <span>coach@boukraa.net</span>
+              <span>coach@boukraa.com</span>
             </a>
           </div>
 

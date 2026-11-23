@@ -71,6 +71,9 @@ function getCleanDigits(phone: string): string {
   return phone.replace(/[^0-9]/g, '');
 }
 
+/**
+ * Build the notification email sent to Coach Boukraa
+ */
 export function buildEmailContent(submission: StoredSubmission): {
   subject: string;
   html: string;
@@ -85,10 +88,10 @@ export function buildEmailContent(submission: StoredSubmission): {
 
   const clientEmail =
     submission.email ||
-    submission.answers.email ||
-    (submission.whatsapp.includes('@') ? submission.whatsapp : undefined);
+    submission.answers?.email ||
+    (submission.whatsapp?.includes('@') ? submission.whatsapp : undefined);
 
-  const rawPhone = submission.whatsapp || submission.answers.whatsapp || '';
+  const rawPhone = submission.whatsapp || submission.answers?.whatsapp || '';
   const phoneDigits = getCleanDigits(rawPhone);
   const waUrl = phoneDigits ? `https://wa.me/${phoneDigits}` : '';
 
@@ -98,16 +101,17 @@ export function buildEmailContent(submission: StoredSubmission): {
   const answerEntries = Object.entries(submission.answers || {});
   const tableRowsHtml = answerEntries
     .filter(([key]) => key !== 'fullName' && key !== 'age' && key !== 'email' && key !== 'whatsapp')
-    .map(([key, value]) => {
+    .map(([key, val], idx) => {
       const label = QUESTION_LABELS[key] || key;
-      const formatted = formatValue(key, value);
+      const formatted = formatValue(key, val);
+      const bg = idx % 2 === 0 ? '#FFFFFF' : '#F9F9F7';
       return `
-        <tr>
-          <td style="padding: 10px 14px; border-bottom: 1px solid #E5E5E0; color: #777F87; font-size: 13px; font-weight: 600; width: 40%; vertical-align: top;">
+        <tr style="background-color: ${bg}; border-bottom: 1px solid #E5E5E0;">
+          <td style="padding: 10px 14px; font-weight: 700; color: #14283B; font-size: 12px; width: 38%; vertical-align: top;">
             ${label}
           </td>
-          <td style="padding: 10px 14px; border-bottom: 1px solid #E5E5E0; color: #14283B; font-size: 13px; font-weight: 500; vertical-align: top;">
-            ${formatted.replace(/\n/g, '<br/>')}
+          <td style="padding: 10px 14px; color: #2C3E50; font-size: 13px; line-height: 1.5; vertical-align: top;">
+            ${formatted}
           </td>
         </tr>
       `;
@@ -115,9 +119,7 @@ export function buildEmailContent(submission: StoredSubmission): {
     .join('');
 
   const replyMailto = clientEmail
-    ? `mailto:${clientEmail}?subject=${encodeURIComponent(
-        `BOUKRAA Coaching — Suite à votre demande (${submission.id})`
-      )}`
+    ? `mailto:${clientEmail}?subject=${encodeURIComponent(`Re: Votre demande BOUKRAA Coaching (${submission.id})`)}`
     : '';
 
   const html = `
@@ -131,23 +133,23 @@ export function buildEmailContent(submission: StoredSubmission): {
   <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="background-color: #F5F5F2; padding: 24px 12px;">
     <tr>
       <td align="center">
-        <table role="presentation" width="100%" style="max-width: 620px; background-color: #FFFFFF; border-radius: 16px; overflow: hidden; border: 1px solid #E5E5E0; box-shadow: 0 4px 16px rgba(0,0,0,0.06);">
+        <table role="presentation" width="100%" style="max-width: 600px; background-color: #FFFFFF; border-radius: 12px; overflow: hidden; border: 1px solid #E5E5E0; box-shadow: 0 4px 14px rgba(20, 40, 59, 0.06);">
           
           <!-- Header -->
           <tr>
-            <td style="background-color: #14283B; padding: 28px 32px; border-bottom: 3px solid #EF252D;">
+            <td style="background-color: #14283B; padding: 26px 32px; border-bottom: 3px solid #EF252D;">
               <table role="presentation" width="100%" cellspacing="0" cellpadding="0">
                 <tr>
                   <td>
-                    <div style="font-size: 11px; letter-spacing: 3px; font-weight: 800; color: #EF252D; text-transform: uppercase; margin-bottom: 4px;">
+                    <div style="font-size: 20px; font-weight: 900; letter-spacing: 2px; color: #FFFFFF; text-transform: uppercase;">
+                      BOUKRAA
+                    </div>
+                    <div style="font-size: 11px; font-weight: 600; letter-spacing: 1.5px; color: #EF252D; text-transform: uppercase; margin-top: 4px;">
                       NOUVELLE DEMANDE D'ÉVALUATION
                     </div>
-                    <div style="font-size: 24px; font-weight: 900; color: #FFFFFF; letter-spacing: 0.5px;">
-                      BOUKRAA COACHING
-                    </div>
                   </td>
-                  <td align="right" style="vertical-align: middle;">
-                    <span style="background-color: rgba(239, 37, 45, 0.18); border: 1px solid #EF252D; color: #FFFFFF; font-family: ui-monospace, monospace; font-size: 12px; font-weight: 800; padding: 6px 12px; rounded: 8px; border-radius: 6px;">
+                  <td align="right">
+                    <span style="display: inline-block; background-color: rgba(255,255,255,0.12); color: #FFFFFF; font-family: monospace; font-size: 12px; font-weight: 700; padding: 6px 12px; border-radius: 6px; letter-spacing: 1px;">
                       ${submission.id}
                     </span>
                   </td>
@@ -156,23 +158,26 @@ export function buildEmailContent(submission: StoredSubmission): {
             </td>
           </tr>
 
-          <!-- Client Overview Card -->
+          <!-- Summary Box -->
           <tr>
-            <td style="padding: 28px 32px 16px 32px;">
-              <div style="background-color: #F5F5F2; border: 1px solid #E5E5E0; border-radius: 12px; padding: 20px 24px; margin-bottom: 24px;">
-                <div style="font-size: 11px; font-weight: 800; letter-spacing: 1.5px; color: #EF252D; text-transform: uppercase; margin-bottom: 8px;">
-                  SERVICE DEMANDÉ : ${serviceInfo.fr}
-                </div>
-                <div style="font-size: 20px; font-weight: 800; color: #14283B; margin-bottom: 12px;">
-                  ${submission.fullName} <span style="font-size: 14px; font-weight: 500; color: #777F87;">(${submission.age} ans)</span>
-                </div>
-                
-                <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="font-size: 13px; line-height: 1.6;">
+            <td style="padding: 28px 32px 18px 32px;">
+              <div style="background-color: #F5F5F2; border-left: 4px solid #EF252D; border-radius: 6px; padding: 18px 20px; margin-bottom: 24px;">
+                <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="font-size: 13px;">
+                  <tr>
+                    <td style="padding: 3px 0; color: #777F87; font-weight: 600; width: 110px;">Athlète :</td>
+                    <td style="padding: 3px 0; color: #14283B; font-weight: 800; font-size: 15px;">${submission.fullName} (${submission.age} ans)</td>
+                  </tr>
+                  <tr>
+                    <td style="padding: 3px 0; color: #777F87; font-weight: 600;">Service :</td>
+                    <td style="padding: 3px 0; color: #EF252D; font-weight: 800; text-transform: uppercase;">${serviceInfo.fr}</td>
+                  </tr>
                   ${
                     clientEmail
                       ? `<tr>
-                          <td style="padding: 3px 0; color: #777F87; font-weight: 600; width: 110px;">Email :</td>
-                          <td style="padding: 3px 0;"><a href="mailto:${clientEmail}" style="color: #14283B; font-weight: 700; text-decoration: underline;">${clientEmail}</a></td>
+                          <td style="padding: 3px 0; color: #777F87; font-weight: 600;">Email :</td>
+                          <td style="padding: 3px 0;">
+                            <a href="mailto:${clientEmail}" style="color: #14283B; font-weight: 700; text-decoration: none;">${clientEmail}</a>
+                          </td>
                         </tr>`
                       : ''
                   }
@@ -261,20 +266,18 @@ export function buildEmailContent(submission: StoredSubmission): {
   </table>
 </body>
 </html>
-  `;
+  `.trim();
 
   const text = `
-NOUVELLE DEMANDE D'ÉVALUATION - BOUKRAA COACHING
-------------------------------------------------
-Référence : ${submission.id}
+NOUVELLE DEMANDE D'ÉVALUATION - BOUKRAA (${submission.id})
 Service : ${serviceInfo.fr}
-Client : ${submission.fullName} (${submission.age} ans)
+Athlète : ${submission.fullName} (${submission.age} ans)
 Email : ${clientEmail || 'Non renseigné'}
 WhatsApp : ${rawPhone || 'Non renseigné'}
+Langue : ${submission.language || 'FR'}
 Date : ${submission.createdAt}
-Langue : ${submission.language}
 
-DÉTAILS DU QUESTIONNAIRE :
+--- RÉPONSES DU QUESTIONNAIRE ---
 ${answerEntries
   .filter(([k]) => k !== 'fullName' && k !== 'age' && k !== 'email' && k !== 'whatsapp')
   .map(([k, v]) => `• ${QUESTION_LABELS[k] || k} : ${formatValue(k, v)}`)
@@ -288,24 +291,293 @@ Espace Coach : https://boukraa.vercel.app/#admin
   return { subject, html, text, replyToEmail: clientEmail };
 }
 
-export async function sendSubmissionEmail(submission: StoredSubmission): Promise<{
-  success: boolean;
-  provider?: string;
-  id?: string;
-  error?: string;
-}> {
-  const targetRecipient = process.env.NOTIFICATION_EMAIL || 'coach@boukraa.net';
-  const { subject, html, text, replyToEmail } = buildEmailContent(submission);
+/**
+ * Build the automatic response email sent directly to the applicant
+ */
+export function buildAutoReplyContent(submission: StoredSubmission): {
+  subject: string;
+  html: string;
+  text: string;
+} {
+  const lang = (submission.language || 'fr').toLowerCase();
+  const serviceInfo = SERVICE_TITLES[submission.service] || {
+    fr: submission.service,
+    en: submission.service,
+    ar: submission.service,
+  };
 
-  // 1. Try Resend API (Recommended free system)
+  const clientName = submission.fullName || 'Athlète';
+  const serviceName = lang === 'ar' ? serviceInfo.ar : lang === 'en' ? serviceInfo.en : serviceInfo.fr;
+
+  let subject = `[BOUKRAA] Confirmation de votre demande d'évaluation (${submission.id})`;
+  if (lang === 'ar') {
+    subject = `[BOUKRAA] تم استلام طلبك بنجاح — الكوتش بوكرع محمد أمين (${submission.id})`;
+  } else if (lang === 'en') {
+    subject = `[BOUKRAA] Assessment request received — Coach Mohamed Amine Boukraa (${submission.id})`;
+  }
+
+  // Localized texts
+  let title = "DEMANDE BIEN REÇUE";
+  let greeting = `Bonjour ${clientName},`;
+  let p1 = `Merci pour votre démarche. Votre formulaire d'évaluation pour le service <strong>${serviceName}</strong> a bien été transmis au Coach Mohamed Amine Boukraa.`;
+  let p2 = `Chaque programme d'entraînement est construit sur-mesure autour de vos objectifs, de votre niveau et de vos contraintes. Afin de garantir un accompagnement de haute qualité, un nombre limité de nouveaux athlètes et clients est accepté chaque mois.`;
+  let p3 = `Votre demande est actuellement en cours d'analyse personnelle. Je reviendrai vers vous dans les plus brefs délais avec une proposition adaptée (par email ou directement sur WhatsApp).`;
+  let recapTitle = "RÉCAPITULATIF DE VOTRE DEMANDE";
+  let refLabel = "Référence dossier :";
+  let coachRole = "Enseignant d'EPS · Préparateur Physique · Entraîneur de Football";
+  let signoff = "À très bientôt,";
+  let direction = "ltr";
+  let align = "left";
+
+  if (lang === 'ar') {
+    direction = "rtl";
+    align = "right";
+    title = "تم استلام طلبك بنجاح";
+    greeting = `السلام عليكم ${clientName}،`;
+    p1 = `شكراً لاهتمامك وثقتك. تم استلام استمارة التقييم الخاصة بك لخدمة <strong>${serviceName}</strong> بنجاح لدى الكوتش بوكرع محمد أمين.`;
+    p2 = `كل برنامج تدريبي يتم تصميمه خصيصاً وبشكل فردي وفقاً لأهدافك ومستواك وظروفك. ولضمان أعلى جودة من المتابعة والاهتمام، أقبل عدداً محدوداً من المتدربين الجدد شهرياً.`;
+    p3 = `طلبك قيد المراجعة الشخصية حالياً، وسأتواصل معك شخصياً في أقرب وقت بالمقترح والخطة التدريبية الأنسب (عبر البريد الإلكتروني أو مباشرة عبر الواتساب).`;
+    recapTitle = "ملخص طلبك";
+    refLabel = "الرقم المرجعي :";
+    coachRole = "أستاذ تربية بدنية · معد بدني · مدرب كرة قدم";
+    signoff = "مع تحياتي،";
+  } else if (lang === 'en') {
+    title = "REQUEST RECEIVED";
+    greeting = `Hello ${clientName},`;
+    p1 = `Thank you for reaching out. Your assessment questionnaire for <strong>${serviceName}</strong> has been received by Coach Mohamed Amine Boukraa.`;
+    p2 = `Every training program is individually designed around your goals, current level, and schedule. To maintain a high level of coaching support, I accept a limited number of new clients each month.`;
+    p3 = `Your request is currently being personally reviewed. I will get back to you shortly with the best coaching approach and next steps (via email or directly on WhatsApp).`;
+    recapTitle = "SUMMARY OF YOUR REQUEST";
+    refLabel = "Reference ID:";
+    coachRole = "PE Teacher · Strength & Conditioning Coach · Football Coach";
+    signoff = "Best regards,";
+  }
+
+  const html = `
+<!DOCTYPE html>
+<html lang="${lang}" dir="${direction}">
+<head>
+  <meta charset="UTF-8">
+  <title>${subject}</title>
+</head>
+<body style="margin: 0; padding: 0; background-color: #F5F5F2; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; color: #14283B;" dir="${direction}">
+  <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="background-color: #F5F5F2; padding: 24px 12px;">
+    <tr>
+      <td align="center">
+        <table role="presentation" width="100%" style="max-width: 580px; background-color: #FFFFFF; border-radius: 12px; overflow: hidden; border: 1px solid #E5E5E0; box-shadow: 0 4px 14px rgba(20, 40, 59, 0.06); text-align: ${align};">
+          
+          <!-- Header Banner -->
+          <tr>
+            <td style="background-color: #14283B; padding: 28px 32px; border-bottom: 3px solid #EF252D;">
+              <table role="presentation" width="100%" cellspacing="0" cellpadding="0">
+                <tr>
+                  <td>
+                    <div style="font-size: 22px; font-weight: 900; letter-spacing: 2px; color: #FFFFFF; text-transform: uppercase;">
+                      BOUKRAA
+                    </div>
+                    <div style="font-size: 11px; font-weight: 600; letter-spacing: 1.5px; color: #EF252D; text-transform: uppercase; margin-top: 4px;">
+                      ${title}
+                    </div>
+                  </td>
+                  <td align="${direction === 'rtl' ? 'left' : 'right'}">
+                    <span style="display: inline-block; background-color: rgba(255,255,255,0.12); color: #FFFFFF; font-family: monospace; font-size: 12px; font-weight: 700; padding: 6px 12px; border-radius: 6px;">
+                      ${submission.id}
+                    </span>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+
+          <!-- Main Content -->
+          <tr>
+            <td style="padding: 32px;">
+              <h2 style="margin: 0 0 16px 0; font-size: 18px; font-weight: 800; color: #14283B;">
+                ${greeting}
+              </h2>
+
+              <p style="font-size: 14px; line-height: 1.6; color: #2C3E50; margin: 0 0 14px 0;">
+                ${p1}
+              </p>
+
+              <div style="background-color: #F9F9F7; border-left: 3px solid #EF252D; border-radius: 6px; padding: 14px 16px; margin: 18px 0; font-size: 13px; line-height: 1.6; color: #555E68;">
+                ${p2}
+              </div>
+
+              <p style="font-size: 14px; line-height: 1.6; color: #2C3E50; margin: 0 0 24px 0;">
+                ${p3}
+              </p>
+
+              <!-- Recap Box -->
+              <div style="background-color: #F5F5F2; border: 1px solid #E5E5E0; border-radius: 8px; padding: 16px 18px; margin-bottom: 24px;">
+                <div style="font-size: 11px; font-weight: 800; letter-spacing: 1px; color: #14283B; text-transform: uppercase; margin-bottom: 10px;">
+                  ${recapTitle}
+                </div>
+                <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="font-size: 12px;">
+                  <tr>
+                    <td style="padding: 3px 0; color: #777F87; width: 40%; font-weight: 600;">${refLabel}</td>
+                    <td style="padding: 3px 0; font-weight: 700; color: #14283B; font-family: monospace;">${submission.id}</td>
+                  </tr>
+                  <tr>
+                    <td style="padding: 3px 0; color: #777F87; font-weight: 600;">Service :</td>
+                    <td style="padding: 3px 0; font-weight: 700; color: #EF252D;">${serviceName}</td>
+                  </tr>
+                  ${
+                    submission.answers?.sport
+                      ? `<tr>
+                          <td style="padding: 3px 0; color: #777F87; font-weight: 600;">Sport :</td>
+                          <td style="padding: 3px 0; font-weight: 700; color: #14283B;">${submission.answers.sport}</td>
+                        </tr>`
+                      : ''
+                  }
+                  ${
+                    submission.answers?.mainGoal
+                      ? `<tr>
+                          <td style="padding: 3px 0; color: #777F87; font-weight: 600;">Objectif :</td>
+                          <td style="padding: 3px 0; font-weight: 700; color: #14283B;">${formatValue('mainGoal', submission.answers.mainGoal)}</td>
+                        </tr>`
+                      : ''
+                  }
+                </table>
+              </div>
+
+              <!-- Coach Signature -->
+              <div style="border-top: 1px solid #E5E5E0; padding-top: 20px; margin-top: 20px;">
+                <p style="font-size: 13px; color: #777F87; margin: 0 0 6px 0;">
+                  ${signoff}
+                </p>
+                <div style="font-size: 16px; font-weight: 900; color: #14283B; letter-spacing: 0.5px;">
+                  Mohamed Amine Boukraa (بوكرع محمد أمين)
+                </div>
+                <div style="font-size: 12px; font-weight: 600; color: #777F87; margin-top: 2px;">
+                  ${coachRole}
+                </div>
+                <div style="font-size: 12px; font-weight: 700; color: #EF252D; margin-top: 6px;">
+                  <a href="https://www.boukraa.net" style="color: #EF252D; text-decoration: none;">www.boukraa.net</a>
+                </div>
+              </div>
+
+            </td>
+          </tr>
+
+          <!-- Footer Social Links -->
+          <tr>
+            <td style="background-color: #F5F5F2; padding: 20px 32px; border-top: 1px solid #E5E5E0; text-align: center;">
+              <div style="font-size: 12px; color: #777F87; margin-bottom: 8px;">
+                Suivez Coach Boukraa sur les réseaux sociaux :
+              </div>
+              <div style="font-size: 12px;">
+                <a href="https://www.instagram.com/coachboukraa/" target="_blank" style="color: #14283B; font-weight: 700; text-decoration: none; margin: 0 8px;">Instagram</a> ·
+                <a href="https://www.facebook.com/p/Coach-Boukraa-61596358826407/" target="_blank" style="color: #14283B; font-weight: 700; text-decoration: none; margin: 0 8px;">Facebook</a> ·
+                <a href="https://www.tiktok.com/@coach.boukraa" target="_blank" style="color: #14283B; font-weight: 700; text-decoration: none; margin: 0 8px;">TikTok</a>
+              </div>
+            </td>
+          </tr>
+
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>
+  `.trim();
+
+  const text = `
+${greeting}
+
+${p1.replace(/<[^>]+>/g, '')}
+
+${p2}
+
+${p3}
+
+Référence : ${submission.id}
+Service : ${serviceName}
+
+${signoff}
+Mohamed Amine Boukraa (بوكرع محمد أمين)
+${coachRole}
+https://www.boukraa.net
+  `.trim();
+
+  return { subject, html, text };
+}
+
+/**
+ * Universal email sender with automatic provider selection:
+ * 1. Hostinger Mail API (direct, high deliverability, native to coach@boukraa.net)
+ * 2. Resend REST API
+ * 3. Nodemailer SMTP
+ * 4. Web3Forms fallback
+ */
+async function sendEmailWithProvider({
+  to,
+  subject,
+  html,
+  text,
+  replyToEmail,
+  replyToName,
+}: {
+  to: string[];
+  subject: string;
+  html: string;
+  text: string;
+  replyToEmail?: string;
+  replyToName?: string;
+}): Promise<{ success: boolean; provider?: string; id?: string; error?: string }> {
+  // 1. Hostinger Mail API (Primary default for Hostinger setup)
+  const hostingerToken =
+    process.env.HOSTINGER_MAIL_TOKEN ||
+    '1303a171f7580eb0165630013e4a1ab11a85c1d1474cafd17b1e5d2fc192133d';
+  const hostingerMailboxId =
+    process.env.HOSTINGER_MAILBOX_ID || 'AC55ebeba0ae74a3a8de626fdd8460';
+
+  if (hostingerToken && hostingerMailboxId) {
+    try {
+      const payload: any = {
+        to,
+        subject,
+        html,
+        text,
+      };
+
+      if (replyToEmail) {
+        payload.replyTo = [{ name: replyToName || '', address: replyToEmail }];
+      }
+
+      const res = await fetch(
+        `https://api.mail.hostinger.com/api/v1/mailboxes/${hostingerMailboxId}/send`,
+        {
+          method: 'POST',
+          headers: {
+            Authorization: `Bearer ${hostingerToken}`,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(payload),
+        }
+      );
+
+      if (res.ok || res.status === 204) {
+        console.log(`[HOSTINGER MAIL API SENT] to: ${to.join(', ')} | subject: ${subject}`);
+        return { success: true, provider: 'hostinger-api' };
+      } else {
+        const errorText = await res.text().catch(() => '');
+        console.warn(`[HOSTINGER MAIL API FAILED ${res.status}]`, errorText);
+      }
+    } catch (err: any) {
+      console.error('[HOSTINGER MAIL API ERROR]', err.message);
+    }
+  }
+
+  // 2. Resend API (Fallback / Alternative)
   const resendApiKey = process.env.RESEND_API_KEY;
   if (resendApiKey) {
     try {
-      const fromEmail = process.env.EMAIL_FROM || 'BOUKRAA <notifications@boukraa.net>';
+      const fromEmail = process.env.EMAIL_FROM || 'BOUKRAA <coach@boukraa.net>';
 
       const payload: any = {
         from: fromEmail,
-        to: [targetRecipient],
+        to,
         subject,
         html,
         text,
@@ -327,10 +599,7 @@ export async function sendSubmissionEmail(submission: StoredSubmission): Promise
       const data = (await res.json().catch(() => ({}))) as any;
 
       if (!res.ok) {
-        console.warn('[RESEND ERROR]', data);
-        // If domain not verified yet on custom from address, try onboarding sandbox if to is owner
         if (data?.message?.includes('domain') && !fromEmail.includes('resend.dev')) {
-          console.log('[RESEND RETRY] Retrying with onboarding@resend.dev...');
           const retryRes = await fetch('https://api.resend.com/emails', {
             method: 'POST',
             headers: {
@@ -344,21 +613,21 @@ export async function sendSubmissionEmail(submission: StoredSubmission): Promise
           });
           const retryData = await retryRes.json().catch(() => ({}));
           if (retryRes.ok) {
-            console.log(`[EMAIL SENT VIA RESEND SANDBOX] ID: ${retryData.id} to ${targetRecipient}`);
+            console.log(`[EMAIL SENT VIA RESEND SANDBOX] ID: ${retryData.id}`);
             return { success: true, provider: 'resend-sandbox', id: retryData.id };
           }
         }
         throw new Error(data.message || 'Resend API error');
       }
 
-      console.log(`[EMAIL SENT VIA RESEND] ID: ${data.id} to ${targetRecipient}`);
+      console.log(`[EMAIL SENT VIA RESEND] ID: ${data.id}`);
       return { success: true, provider: 'resend', id: data.id };
     } catch (err: any) {
       console.error('[EMAIL ERROR RESEND]', err.message);
     }
   }
 
-  // 2. Try SMTP via Nodemailer if SMTP credentials are provided (e.g. Spaceship Spacemail, Hostinger, Gmail)
+  // 3. SMTP via Nodemailer (e.g. smtp.hostinger.com)
   const smtpHost = process.env.SMTP_HOST;
   const smtpUser = process.env.SMTP_USER;
   const smtpPass = process.env.SMTP_PASS;
@@ -381,7 +650,7 @@ export async function sendSubmissionEmail(submission: StoredSubmission): Promise
 
       const mailOptions: any = {
         from: process.env.EMAIL_FROM || `"BOUKRAA Coaching" <${smtpUser}>`,
-        to: targetRecipient,
+        to: to.join(', '),
         subject,
         text,
         html,
@@ -392,22 +661,22 @@ export async function sendSubmissionEmail(submission: StoredSubmission): Promise
       }
 
       const info = await transporter.sendMail(mailOptions);
-      console.log(`[EMAIL SENT VIA SMTP] ID: ${info.messageId} to ${targetRecipient}`);
+      console.log(`[EMAIL SENT VIA SMTP] ID: ${info.messageId}`);
       return { success: true, provider: 'smtp', id: info.messageId };
     } catch (err: any) {
       console.error('[EMAIL ERROR SMTP]', err.message);
     }
   }
 
-  // 3. Try Web3Forms access key (zero-config free fallback)
+  // 4. Web3Forms fallback
   const web3formsKey = process.env.WEB3FORMS_ACCESS_KEY;
   if (web3formsKey) {
     try {
       const formPayload: any = {
         access_key: web3formsKey,
         subject,
-        from_name: `BOUKRAA - ${submission.fullName}`,
-        email: replyToEmail || 'no-reply@boukraa.net',
+        from_name: 'BOUKRAA Coaching',
+        email: replyToEmail || 'coach@boukraa.net',
         message: text,
       };
 
@@ -419,7 +688,6 @@ export async function sendSubmissionEmail(submission: StoredSubmission): Promise
 
       const data = await res.json().catch(() => ({}));
       if (res.ok && data.success) {
-        console.log(`[EMAIL SENT VIA WEB3FORMS] to ${targetRecipient}`);
         return { success: true, provider: 'web3forms' };
       }
     } catch (err: any) {
@@ -427,12 +695,63 @@ export async function sendSubmissionEmail(submission: StoredSubmission): Promise
     }
   }
 
-  console.log(
-    `[EMAIL NOT SENT - NO PROVIDER CONFIGURED] Submission ${submission.id} saved in database. Set RESEND_API_KEY or SMTP_HOST/USER/PASS in Vercel environment variables to enable automatic delivery to ${targetRecipient}.`
-  );
-
   return {
     success: false,
-    error: 'No email service configured. Set RESEND_API_KEY in environment variables.',
+    error: 'No email service could dispatch the message.',
   };
+}
+
+/**
+ * Send notification to Coach Boukraa (delivered to coach@boukraa.com and coach@boukraa.net)
+ */
+export async function sendSubmissionEmail(submission: StoredSubmission): Promise<{
+  success: boolean;
+  provider?: string;
+  id?: string;
+  error?: string;
+}> {
+  const envRecipients = process.env.NOTIFICATION_EMAIL
+    ? process.env.NOTIFICATION_EMAIL.split(',').map((e) => e.trim()).filter(Boolean)
+    : ['coach@boukraa.com', 'coach@boukraa.net'];
+
+  const { subject, html, text, replyToEmail } = buildEmailContent(submission);
+
+  return sendEmailWithProvider({
+    to: envRecipients,
+    subject,
+    html,
+    text,
+    replyToEmail,
+    replyToName: submission.fullName,
+  });
+}
+
+/**
+ * Send automatic confirmation reply to the applicant
+ */
+export async function sendApplicantAutoReply(submission: StoredSubmission): Promise<{
+  success: boolean;
+  provider?: string;
+  error?: string;
+}> {
+  const clientEmail =
+    submission.email ||
+    submission.answers?.email ||
+    (submission.whatsapp?.includes('@') ? submission.whatsapp : undefined);
+
+  if (!clientEmail || !clientEmail.includes('@')) {
+    console.log(`[AUTO-REPLY SKIPPED] No valid applicant email for submission ${submission.id}`);
+    return { success: false, error: 'No client email provided' };
+  }
+
+  const { subject, html, text } = buildAutoReplyContent(submission);
+
+  return sendEmailWithProvider({
+    to: [clientEmail.trim()],
+    subject,
+    html,
+    text,
+    replyToEmail: 'coach@boukraa.com',
+    replyToName: 'Coach Mohamed Amine Boukraa',
+  });
 }
